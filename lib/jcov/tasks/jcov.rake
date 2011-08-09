@@ -14,7 +14,7 @@ desc "Run all the jspec tests"
 task :jspec do
   require 'rake/jspec'
 
-  jspec = JSpec::Runner.new(config)
+  jspec = JCov::Runner.new(config)
 
   jspec.run
 
@@ -26,7 +26,7 @@ desc "Run all the jspec tests and report coverage"
 task :jcov do
   require 'rake/jcov'
 
-  jspec = JSpec::Coverage::CoverageRunner.new(config)
+  jspec = JCov::Coverage::CoverageRunner.new(config)
 
   percent = jspec.run
 

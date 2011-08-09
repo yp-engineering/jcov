@@ -30,7 +30,7 @@ module JCov
       def initialize config={}
         @config = config
 
-        @runner = JSpec::Runner.new(config)
+        @runner = JCov::Runner.new(config)
 
         load_config_file
         override_runners_load_method
