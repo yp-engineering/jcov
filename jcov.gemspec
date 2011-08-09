@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.summary     = %q{Javascript Coverage Tool}
   s.description = %q{Javascript Coverage Tool}
 
-  s.add_development_dependency "therubyracer",    "0.9.0"
-  s.add_development_dependency "rkelly-dmcinnes", "1.0.3"
+  s.add_dependency "therubyracer",    "0.9.0"
+  s.add_dependency "rkelly-dmcinnes", "1.0.3"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
