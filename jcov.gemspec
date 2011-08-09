@@ -4,7 +4,7 @@ require "jcov/version"
 
 Gem::Specification.new do |s|
   s.name        = "jcov"
-  s.version     = Jcov::VERSION
+  s.version     = JCov::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Doug McInnes"]
   s.email       = ["dmcinnes@attinteractive.com"]
