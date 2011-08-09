@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Doug McInnes"]
   s.email       = ["dmcinnes@attinteractive.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Javascript Coverage Tool}
+  s.description = %q{Javascript Coverage Tool}
 
   s.add_development_dependency "therubyracer",    "0.9.0"
   s.add_development_dependency "rkelly-dmcinnes", "1.0.3"
