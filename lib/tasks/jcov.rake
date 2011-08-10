@@ -12,7 +12,7 @@ end
 
 desc "Run all the jspec tests"
 task :jspec do
-  require 'rake/jspec'
+  require 'jcov'
 
   jspec = JCov::Runner.new(config)
 
@@ -24,7 +24,7 @@ end
 
 desc "Run all the jspec tests and report coverage"
 task :jcov do
-  require 'rake/jcov'
+  require 'jcov'
 
   jspec = JCov::Coverage::CoverageRunner.new(config)
 
