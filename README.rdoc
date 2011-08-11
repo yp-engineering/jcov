@@ -1,0 +1,17 @@
+= JCov
+
+Coverage reports on your Javascript tests!
+
+Supports:
+* JSpec
+
+== Installation
+
+gem install jcov
+
+== Getting Started
+
+== License
+
+JCov is licensed under the MIT License with one addition: 
+  The Software shall be used for Good, not Evil.
