@@ -15,6 +15,9 @@ Gem::Specification.new do |s|
   s.add_dependency "therubyracer",    "0.9.0"
   s.add_dependency "rkelly-dmcinnes", "1.0.3"
 
+  s.add_development_dependency "cucumber", '~> 1.0'
+  s.add_development_dependency 'aruba'
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
