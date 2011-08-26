@@ -14,9 +14,34 @@ Feature: test runner
     Given a file named "jspec/v8.js" with:
     """
     print('foo');
+    JSpec = { stats: { failures:0 } };
     """
     When I run `rake jspec`
     Then the output should contain:
     """
     foo
+    """
+
+  @announce
+  Scenario: reports success
+    Given a file named "jspec/v8.js" with:
+    """
+    JSpec = { stats: { failures:0 } };
+    """
+    When I run `rake jspec`
+    Then the output should not contain:
+    """
+    JSpec Test Failures! :(
+    """
+
+  @announce
+  Scenario: reports the number of failures
+    Given a file named "jspec/v8.js" with:
+    """
+    JSpec = { stats: { failures:3 } };
+    """
+    When I run `rake jspec`
+    Then the output should contain:
+    """
+    JSpec Test Failures! :(
     """
