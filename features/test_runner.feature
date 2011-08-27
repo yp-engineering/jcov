@@ -9,12 +9,11 @@ Feature: test runner
     load '../../lib/tasks/jcov.rake'
     """
 
-  @announce
   Scenario: runs jspec
     Given a file named "jspec/v8.js" with:
     """
-    print('foo');
     JSpec = { stats: { failures:0 } };
+    print('foo');
     """
     When I run `rake jspec`
     Then the output should contain:
@@ -22,7 +21,6 @@ Feature: test runner
     foo
     """
 
-  @announce
   Scenario: reports success
     Given a file named "jspec/v8.js" with:
     """
@@ -33,9 +31,9 @@ Feature: test runner
     """
     JSpec Test Failures! :(
     """
+    And the exit status should be 0
 
-  @announce
-  Scenario: reports the number of failures
+  Scenario: reports the failures
     Given a file named "jspec/v8.js" with:
     """
     JSpec = { stats: { failures:3 } };
@@ -45,3 +43,7 @@ Feature: test runner
     """
     JSpec Test Failures! :(
     """
+    And the exit status should not be 0
+
+  @wip
+  Scenario: provides the test framework the set of tests to run
