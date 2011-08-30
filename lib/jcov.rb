@@ -2,6 +2,7 @@ require 'v8'
 require 'rkelly'
 
 require 'jcov/version'
+require 'jcov/configuration'
 require 'jcov/commands'
 require 'jcov/runner'
 require 'jcov/coverage'

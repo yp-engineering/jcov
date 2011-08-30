@@ -29,21 +29,38 @@ Feature: configuration
     """
 
   Scenario: looks for its configuration in a set of logical places
-    # Given a file named "jcov.yml" with:
-    # """
-    # threshold: 33
-    # """
-    # When I remove the file "config/jcov.yml"
-    # When I run `jcov check`
-    # Then the output should contain:
-    # """
-    # threshold: 33
-    # """
+    Given a file named "jcov.yml" with:
+    """
+    threshold: 33
+    """
+    When I remove the file "config/jcov.yml"
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    threshold: 33
+    """
+
+  Scenario: uses its default configuration if it can't find a configuration file
+    When I remove the file "config/jcov.yml"
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    source_file_directory: public/javascripts
+    """
+
+  Scenario: it merges configuration with the defaults
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    source_file_directory: public/javascripts
+    """
+    And the output should contain:
+    """
+    threshold: 76.8
+    """
 
   Scenario: configures where to look for the test files
 
   Scenario: configures what command to run to start the tests
-
-  Scenario: configures where to look for the test files
 
   Scenario: has defaults for all the configuration values
