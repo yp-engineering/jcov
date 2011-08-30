@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'commander/import'
+require 'jcov'
+
+program :version, JCov::VERSION
+program :description, 'Run coverage reports on Javascript'
+program :help_formatter, :compact
+
+global_option '-c', '--config FILE', 'Specify a configuration file to use'
+ 
+command :check do |c|
+  c.syntax      = 'jcov check [options]'
+  c.summary     = 'Check configuration options'
+  c.description = 'Check and output current configuration options.'
+  c.example       'run the check', 'jcov check'
+  c.when_called   JCov::Commands::Check
+end
