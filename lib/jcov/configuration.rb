@@ -8,7 +8,10 @@ module JCov
     attr_reader :config
 
     DEFAULTS = {
-      source_file_directory: "public/javascripts"
+      test_directory:   "test/javascripts",
+      source_directory: "public/javascripts",
+      test_runner:      "test/javascripts/runner.js",
+      error_field:      "error_count"
     }
 
     def initialize file
@@ -23,13 +26,11 @@ module JCov
     private
 
     def find_file file
-      if file && File.exists?(file)
-	file
-      else
-	LOCATIONS.find do |file|
-	  File.exists?(file)
-	end
-      end
+      raise "Cannot find file \"#{file}\"" if file && !File.exists?(file)
+
+      file || LOCATIONS.find do |file|
+                File.exists?(file)
+              end
     end
     
   end

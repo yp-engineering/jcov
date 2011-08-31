@@ -45,22 +45,71 @@ Feature: configuration
     When I run `jcov check`
     Then the output should contain:
     """
-    source_file_directory: public/javascripts
+    source_directory: public/javascripts
     """
 
   Scenario: it merges configuration with the defaults
     When I run `jcov check`
     Then the output should contain:
     """
-    source_file_directory: public/javascripts
+    source_directory: public/javascripts
     """
     And the output should contain:
     """
     threshold: 76.8
     """
 
-  Scenario: configures where to look for the test files
+  Scenario: it complains if we provide a configuration file that doesn't exist
+    When I run `jcov check --config=not/a/file.yml`
+    Then the output should contain:
+    """
+    Cannot find file "not/a/file.yml"
+    """
 
-  Scenario: configures what command to run to start the tests
+  Scenario: configures where to look for the test files
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    test_directory:
+    """
+
+  Scenario: configures where to find the source files
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    source_directory:
+    """
+
+  Scenario: configures which javascript file runs the tests
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    test_runner:
+    """
+
+  Scenario: configures where to look for errors in javascript land
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    error_field:
+    """
 
   Scenario: has defaults for all the configuration values
+    When I remove the file "config/jcov.yml"
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    test_directory: test/javascripts
+    """
+    And the output should contain:
+    """
+    source_directory: public/javascripts
+    """
+    And the output should contain:
+    """
+    test_runner: test/javascripts/runner.js
+    """
+    And the output should contain:
+    """
+    error_field: error_count
+    """
