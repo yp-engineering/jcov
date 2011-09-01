@@ -21,7 +21,7 @@ Feature: test runner
     When I run `jcov`
     Then the output should not contain:
     """
-    JSpec Test Failures! :(
+    Test Failures! :(
     """
     And the exit status should be 0
 
@@ -33,9 +33,70 @@ Feature: test runner
     When I run `jcov`
     Then the output should contain:
     """
-    JSpec Test Failures! :(
+    Test Failures! :(
     """
     And the exit status should not be 0
 
-  # @wip
-  # Scenario: provides the test framework the set of tests to run
+  Scenario: provides the test framework the set of tests to run
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    var t = tests();
+    for (var i = 0; i < t.length; i++) {
+      print(t[i]);
+    }
+    """
+    And an empty file named "test/javascripts/foo_test.js"
+    And an empty file named "test/javascripts/wazzle/bar_test.js"
+    When I run `jcov`
+    Then the output should contain:
+    """
+    test/javascripts/foo_test.js
+    test/javascripts/wazzle/bar_test.js
+    """
+    And the output should not contain:
+    """
+    test/javascripts/runner.js
+    """
+
+  Scenario: allows the user to run a focused test
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    var t = tests();
+    for (var i = 0; i < t.length; i++) {
+      print(t[i]);
+    }
+    """
+    And an empty file named "test/javascripts/foo_test.js"
+    And an empty file named "test/javascripts/wazzle/bar_test.js"
+    When I run `jcov --test test/javascripts/wazzle/bar_test.js`
+    Then the output should contain:
+    """
+    test/javascripts/wazzle/bar_test.js
+    """
+    And the output should not contain:
+    """
+    test/javascripts/foo_test.js
+    """
+
+  Scenario: allows the user to match tests with a regex
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    var t = tests();
+    for (var i = 0; i < t.length; i++) {
+      print(t[i]);
+    }
+    """
+    And an empty file named "test/javascripts/foo_test.js"
+    And an empty file named "test/javascripts/wazzle/bar_test.js"
+    When I run `jcov --test "wa[z]{2}le"`
+    Then the output should contain:
+    """
+    test/javascripts/wazzle/bar_test.js
+    """
+    And the output should not contain:
+    """
+    test/javascripts/foo_test.js
+    """

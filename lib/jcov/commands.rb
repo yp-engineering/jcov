@@ -14,7 +14,7 @@ module JCov::Commands
     def initialize args, options
       config = JCov::Configuration.new options.config
 
-      runner = JCov::Runner.new(config)
+      runner = JCov::Runner.new(config, options.test)
       
       runner.run
 

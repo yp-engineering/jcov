@@ -24,6 +24,11 @@ module JCov
       @config.to_yaml
     end
 
+    # ignore unset configuration values
+    def method_missing method
+      nil
+    end
+
     private
 
     def find_file file

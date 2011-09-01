@@ -4,8 +4,9 @@ module JCov
     attr_accessor :context
     attr_accessor :config
 
-    def initialize(config={})
+    def initialize(config={}, test=nil)
       @config = config
+      @test   = test
 
       setup_context
       setup_method_proxies
@@ -14,10 +15,12 @@ module JCov
     def tests
       # which tests shall we run?
       if @tests.nil?
-        @tests = Dir.glob(File.join("jspec", "spec", "**", "*.js"))
-        if config[:test] # limit to a single test
-          @tests = @tests.grep(/#{config[:test]}/)
+        @tests = Dir.glob(File.join(config.test_directory, "**", "*.js"))
+        if @test # limit to a single or group of tests
+          @tests = @tests.grep(/#{@test}/)
         end
+        # remove the runner if it's in there
+        @tests.delete(config.test_runner)
         @tests.sort!
       end
       @tests

@@ -21,8 +21,11 @@ end
 
 command :run do |c|
   c.syntax      = 'jcov run [options]'
+  c.option        '-t', '--test REGEX', 'Limit the tests to only the ones that match the regular expression'
   c.summary     = 'Run the tests'
   c.description = 'Run the tests and report on coverage'
   c.example       'Run the tests', 'jcov run'
+  c.example       'Run all the "wazzle" tests', 'jcov run --test wazzle'
+  c.example       'Run the foo_test.js file', 'jcov run --test foo_test.js'
   c.when_called   JCov::Commands::Run
 end
