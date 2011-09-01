@@ -8,6 +8,8 @@ program :description, 'Run coverage reports on Javascript'
 program :help_formatter, :compact
 
 global_option '-c', '--config FILE', 'Specify a configuration file to use'
+
+default_command :run
  
 command :check do |c|
   c.syntax      = 'jcov check [options]'
@@ -15,4 +17,12 @@ command :check do |c|
   c.description = 'Check and output current configuration options.'
   c.example       'run the check', 'jcov check'
   c.when_called   JCov::Commands::Check
+end
+
+command :run do |c|
+  c.syntax      = 'jcov run [options]'
+  c.summary     = 'Run the tests'
+  c.description = 'Run the tests and report on coverage'
+  c.example       'Run the tests', 'jcov run'
+  c.when_called   JCov::Commands::Run
 end

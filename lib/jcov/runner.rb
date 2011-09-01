@@ -45,11 +45,11 @@ module JCov
     end
 
     def failure_count
-      context.eval('JSpec.stats.failures;')
+      context.eval(config.error_field)
     end
 
     def run
-      context.load('jspec/v8.js')
+      context.load(config.test_runner)
 
       failure_count
     end
