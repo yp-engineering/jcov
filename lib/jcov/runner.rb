@@ -1,23 +1,23 @@
 module JCov
 
   class Runner
-    attr_accessor :context
-    attr_accessor :config
+    attr_reader :context
+    attr_reader :config
+    attr_reader :options
 
-    def initialize(config={}, test=nil)
-      @config = config
-      @test   = test
+    def initialize(config, options)
+      @config  = config
+      @options = options
 
       setup_context
-      setup_method_proxies
     end
 
     def tests
       # which tests shall we run?
       if @tests.nil?
         @tests = Dir.glob(File.join(config.test_directory, "**", "*.js"))
-        if @test # limit to a single or group of tests
-          @tests = @tests.grep(/#{@test}/)
+        if options.test # limit to a single or group of tests
+          @tests = @tests.grep(/#{options.test}/)
         end
         # remove the runner if it's in there
         @tests.delete(config.test_runner)
@@ -60,19 +60,25 @@ module JCov
   private
 
     def setup_context
-      # create a new V8 context for this runner
+      # create a V8 context for this runner
       @context = V8::Context.new
 
-      # pass the environment into the javascript context
-      @context["ENV"] = ENV
+      # create the jcov context object
+      @context["JCov"] = {}
 
-      # default to no color unless we're on a tty
-      ENV['nocolor'] = 'true' unless $stdout.tty?
+      setup_object_proxies
+      setup_method_proxies
+    end
+
+    def setup_object_proxies
+      context['JCov']['tests']   = tests
+      context['JCov']['config']  = config
+      context['JCov']['options'] = options.__hash__
     end
 
     def setup_method_proxies
-      %w{tests
-         print
+      # these will become global methods in the context
+      %w{print
          load
          readFile
          putc}.each do |method|

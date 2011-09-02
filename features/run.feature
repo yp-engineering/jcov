@@ -41,7 +41,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    var t = tests();
+    var t = JCov.tests;
     for (var i = 0; i < t.length; i++) {
       print(t[i]);
     }
@@ -63,7 +63,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    var t = tests();
+    var t = JCov.tests;
     for (var i = 0; i < t.length; i++) {
       print(t[i]);
     }
@@ -84,7 +84,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    var t = tests();
+    var t = JCov.tests;
     for (var i = 0; i < t.length; i++) {
       print(t[i]);
     }
@@ -100,3 +100,33 @@ Feature: test runner
     """
     test/javascripts/foo_test.js
     """
+
+  Scenario: configuration is available to the javascript context
+    Given a file named "jcov.yml" with:
+    """
+    threshold: 33
+    """
+    And a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    print(JCov.config.threshold);
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    33
+    """
+
+  Scenario: user can enable verbose mode
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    print(JCov.options.verbose);
+    """
+    When I run `jcov --verbose`
+    Then the output should contain:
+    """
+    true
+    """
+
+  Scenario: user can disable color output

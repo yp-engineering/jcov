@@ -12,9 +12,12 @@ module JCov::Commands
   # the run command
   class Run
     def initialize args, options
+      # default to no color unless we're on a tty
+      options.default :color => $stdout.tty?
+
       config = JCov::Configuration.new options.config
 
-      runner = JCov::Runner.new(config, options.test)
+      runner = JCov::Runner.new(config, options)
       
       runner.run
 
