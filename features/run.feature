@@ -130,3 +130,37 @@ Feature: test runner
     """
 
   Scenario: user can disable color output
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    print(JCov.options.color);
+    """
+    When I run `jcov --no-color`
+    Then the output should contain:
+    """
+    false
+    """
+
+  Scenario: user can enable color output
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    print(JCov.options.color);
+    """
+    When I run `jcov --color`
+    Then the output should contain:
+    """
+    true
+    """
+
+  Scenario: color defaults to off in a non-interactive shell (which cucumber is)
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    print(JCov.options.color);
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    false
+    """
