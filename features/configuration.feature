@@ -113,3 +113,18 @@ Feature: configuration
     """
     error_field: error_count
     """
+
+  Scenario: it prints out what file it is using
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    Using configuration file: config/jcov.yml
+    """
+
+  Scenario: if it can't find a file it tells us that
+    When I remove the file "config/jcov.yml"
+    When I run `jcov check`
+    Then the output should contain:
+    """
+    No configuration file! Using defaults.
+    """

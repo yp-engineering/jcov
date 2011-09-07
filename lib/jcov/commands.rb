@@ -5,7 +5,15 @@ module JCov::Commands
   # the check command
   class Check
     def initialize args, options
-      puts JCov::Configuration.new options.config
+      config = JCov::Configuration.new options.config
+
+      if config.filename
+        puts "Using configuration file: #{config.filename}"
+      else
+        puts "No configuration file! Using defaults."
+      end
+
+      puts config
     end
   end
 

@@ -6,6 +6,7 @@ module JCov
     LOCATIONS = %w{config/jcov.yml ./jcov.yml}
 
     attr_reader :config
+    attr_reader :filename
 
     DEFAULTS = {
       "test_directory"   => "test/javascripts",
@@ -15,8 +16,8 @@ module JCov
     }
 
     def initialize file
-      @config_filename = find_file(file)
-      @config = DEFAULTS.merge(@config_filename && YAML.load_file(@config_filename) || {})
+      @filename = find_file(file)
+      @config = DEFAULTS.merge(@filename && YAML.load_file(@filename) || {})
       create_readers
     end
 
