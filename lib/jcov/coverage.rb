@@ -22,17 +22,15 @@ module JCov
 
 
     class CoverageRunner
-      attr_accessor :config
-      attr_accessor :config_file
-      attr_accessor :runner
-      attr_accessor :instrumented_files
+      attr_reader :config
+      attr_reader :runner
+      attr_reader :instrumented_files
 
-      def initialize config={}
+      def initialize config, options
         @config = config
 
-        @runner = JCov::Runner.new(config)
+        @runner = JCov::Runner.new(config, options)
 
-        load_config_file
         override_runners_load_method
         add_coverage_method_to_context
 
@@ -42,16 +40,12 @@ module JCov
         @instrumented_files = {}
       end
 
-      def load_config_file
-        @config_file = YAML.load_file(File.join(Rails.root, "jspec", "jcov.yml"))
-      end
-
       def coverable_files
         if @coverable_files.nil?
-          # find all the files we're testing on
-          @coverable_files = Dir.glob(File.join("public", "javascripts", "**", "*.js"))
+          # all the files we're testing on
+          @coverable_files = runner.tests
           # only run coverage on files that we haven't specifically ignored
-          ignore = config_file['ignore']
+          ignore = config.ignore || []
           @coverable_files.delete_if {|file| ignore.any? {|i| file.match(i) }}
         end
         @coverable_files
@@ -95,7 +89,7 @@ module JCov
       def run
         runner.run
 
-        coverage_report if config[:report] || config[:test]
+        coverage_report if config.report || config.test
 
         coverage_total
       end
@@ -153,7 +147,7 @@ module JCov
             percent = 100
             coverage_string = "(EMPTY)"
           end
-          if !config[:test] || percent > 0 # only show ran files if we're doing a focused test
+          if !config.test || percent > 0 # only show ran files if we're doing a focused test
             printf "%-#{filename_length}s %-10s %3s%\n", file, coverage_string, percent
           end
         end
@@ -165,7 +159,7 @@ module JCov
         covered = 0
 
         reduced_coverage_data.each do |file, tot, cover|
-          if !config[:test] || cover > 0 # only show ran files if we're doing a focused test
+          if !config.test || cover > 0 # only show ran files if we're doing a focused test
             total += tot
             covered += cover
           end

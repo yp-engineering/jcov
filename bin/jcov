@@ -24,6 +24,7 @@ command :run do |c|
   c.option        '-t', '--test REGEX', 'Limit the tests to only the ones that match the regular expression'
   c.option        '--verbose', 'Verbose test execution'
   c.option        '--[no-]color', 'Enable/Disable color output -- default enabled when executed from the command-line'
+  c.option        '--[no-]coverage', 'Enable/Disable coverage output -- default enabled'
   c.summary     = 'Run the tests'
   c.description = 'Run the tests and report on coverage'
   c.example       'Run the tests', 'jcov run'

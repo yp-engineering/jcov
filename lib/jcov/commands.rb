@@ -21,12 +21,13 @@ module JCov::Commands
   class Run
     def initialize args, options
       # default to no color unless we're on a tty
-      options.default :color => $stdout.tty?
+      options.default :color    => $stdout.tty?
+      options.default :coverage => true
 
       config = JCov::Configuration.new options.config
 
-      runner = JCov::Runner.new(config, options)
-      
+      runner = JCov::Coverage::CoverageRunner.new(config, options)
+
       runner.run
 
       abort("Test Failures! :(") if runner.failure_count > 0
