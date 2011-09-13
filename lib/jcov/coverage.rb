@@ -23,11 +23,13 @@ module JCov
 
     class CoverageRunner
       attr_reader :config
+      attr_reader :options
       attr_reader :runner
       attr_reader :instrumented_files
 
       def initialize config, options
-        @config = config
+        @config  = config
+        @options = options
 
         @runner = JCov::Runner.new(config, options)
 
@@ -88,10 +90,6 @@ module JCov
 
       def run
         runner.run
-
-        coverage_report if config.report || config.test
-
-        coverage_total
       end
 
       # proxy to runner
@@ -129,47 +127,6 @@ module JCov
           end
         end
         @reduced_coverage_data
-      end
-
-      def coverage_report
-        puts "\n"
-
-        puts "Coverage Report"
-        puts "===================="
-
-        filename_length = coverage_data.map(&:first).map(&:length).max
-
-        reduced_coverage_data.each do |file, total, cover|
-          if (total > 0)
-            percent = 100 * cover / total
-            coverage_string = "(#{cover}/#{total})"
-          else
-            percent = 100
-            coverage_string = "(EMPTY)"
-          end
-          if !config.test || percent > 0 # only show ran files if we're doing a focused test
-            printf "%-#{filename_length}s %-10s %3s%\n", file, coverage_string, percent
-          end
-        end
-        puts "===================="
-      end
-
-      def coverage_total
-        total   = 0
-        covered = 0
-
-        reduced_coverage_data.each do |file, tot, cover|
-          if !config.test || cover > 0 # only show ran files if we're doing a focused test
-            total += tot
-            covered += cover
-          end
-        end
-
-        # only keep one significant digit
-        percent = (100.0 * covered / total).round(1)
-        printf "\nTotal Coverage: (%d/%d) %3.1f%\n\n", covered, total, percent
-
-        percent
       end
 
     private

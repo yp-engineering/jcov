@@ -222,3 +222,20 @@ Feature: coverage
     """
     When I run `jcov`
     And the exit status should not be 0
+
+  Scenario: gives a helpful message if no files were checked for coverage
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    load("test/javascripts/foo.js");
+    error_count = 0;
+    """
+    And a file named "jcov.yml" with:
+    """
+    ignore:
+      - foo
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    No files were checked for coverage. Maybe your ignore list in ./jcov.yml is too inclusive?
+    """
