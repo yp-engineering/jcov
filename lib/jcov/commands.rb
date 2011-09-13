@@ -28,9 +28,18 @@ module JCov::Commands
 
       runner = JCov::Coverage::CoverageRunner.new(config, options)
 
-      runner.run
+      percent = runner.run
 
-      abort("Test Failures! :(") if runner.failure_count > 0
+      abort "Test Failures! :(" if runner.failure_count > 0
+
+      if options.coverage && config.threshold
+        if percent < config.threshold
+          abort "FAIL! Coverage is lower than threshold! #{percent}% < #{config.threshold}% :("
+        elsif config.threshold_must_match && percent != config.threshold
+          puts("Coverage does not match threshold! #{percent}% != #{config.threshold}%")
+          abort "Please raise the threshold in #{config.filename}"
+        end
+      end
     end
   end
 
