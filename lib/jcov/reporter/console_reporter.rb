@@ -12,15 +12,21 @@ module JCov::Reporter
 
     def report
       report_total_coverage if total_count > 0
+      report_file_coverage if options.report
       report_error_messages
     end
 
     private
 
-    def report_error_messages
-      options = @coverage_runner.options
-      config  = @coverage_runner.config
+    def config
+      @coverage_runner.config
+    end
 
+    def options
+      @coverage_runner.options
+    end
+
+    def report_error_messages
       if options.coverage && total_count == 0
         puts "No files were checked for coverage. Maybe your ignore list in #{config.filename} is too inclusive?"
       elsif options.coverage && config.threshold
@@ -57,7 +63,7 @@ module JCov::Reporter
           percent = 100
           coverage_string = "(EMPTY)"
         end
-        if !@coverage_runner.config.test || percent > 0 # only show ran files if we're doing a focused test
+        if !config.test || percent > 0 # only show ran files if we're doing a focused test
           printf "%-#{filename_length}s %-10s %3s%\n", file, coverage_string, percent
         end
       end
@@ -69,7 +75,7 @@ module JCov::Reporter
       @covered_count = 0
 
       @coverage_runner.reduced_coverage_data.each do |file, tot, cover|
-        if !@coverage_runner.config.test || cover > 0 # only show ran files if we're doing a focused test
+        if !config.test || cover > 0 # only show ran files if we're doing a focused test
           @total_count   += tot
           @covered_count += cover
         end
