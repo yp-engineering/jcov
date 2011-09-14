@@ -45,7 +45,7 @@ module JCov
       def coverable_files
         if @coverable_files.nil?
           # all the files we're testing on
-          @coverable_files = runner.tests
+          @coverable_files = Dir.glob(File.join(config.source_directory, "**", "*.js"))
           # only run coverage on files that we haven't specifically ignored
           ignore = config.ignore || []
           @coverable_files.delete_if {|file| ignore.any? {|i| file.match(i) }}

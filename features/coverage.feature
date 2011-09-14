@@ -3,7 +3,7 @@ Feature: coverage
   I want to report coverage statistics
 
   Background:
-    Given a file named "test/javascripts/foo.js" with:
+    Given a file named "public/javascripts/foo.js" with:
     """
     var one = "foo";                  // 1
     var z = 0;                        // 2
@@ -23,7 +23,7 @@ Feature: coverage
   Scenario: it will report coverage
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     When I run `jcov`
@@ -35,7 +35,7 @@ Feature: coverage
   Scenario: it will report slightly more coverage
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     two();
     error_count = 0;
     """
@@ -48,7 +48,7 @@ Feature: coverage
   Scenario: it will report full coverage
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     three();
     error_count = 0;
     """
@@ -72,11 +72,11 @@ Feature: coverage
   Scenario: it will report coverage across all files even if they're not loaded
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     three();
     error_count = 0;
     """
-    And a file named "test/javascripts/bar.js" with:
+    And a file named "public/javascripts/bar.js" with:
     """
     var foo = 1;
     var bar = 2;
@@ -91,7 +91,7 @@ Feature: coverage
   Scenario: reports an error message if the coverage is below the threshold
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -107,7 +107,7 @@ Feature: coverage
   Scenario: doesn't report an error message if the coverage is above the threshold
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -123,7 +123,7 @@ Feature: coverage
   Scenario: reports an error message if the coverage is above the threshold and threshold_must_match == true
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -140,7 +140,7 @@ Feature: coverage
   Scenario: tells you where to update threshold if it does not match
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -157,7 +157,7 @@ Feature: coverage
   Scenario: tells you where to update threshold if it does not match even if the file is not in a typical location
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "foo/bar/jcov.yml" with:
@@ -174,7 +174,7 @@ Feature: coverage
   Scenario: doesn't report a threshold error message if the threshold is not set
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     When I run `jcov`
@@ -186,7 +186,7 @@ Feature: coverage
   Scenario: returns a zero exit status if coverage is above the threshold
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -199,7 +199,7 @@ Feature: coverage
   Scenario: returns a non-zero exit status if coverage is below the threshold
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -212,7 +212,7 @@ Feature: coverage
   Scenario: returns a non-zero exit status if coverage is above the threshold and threshold_must_match == true
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
@@ -226,7 +226,7 @@ Feature: coverage
   Scenario: gives a helpful message if no files were checked for coverage
     Given a file named "test/javascripts/runner.js" with:
     """
-    load("test/javascripts/foo.js");
+    load("public/javascripts/foo.js");
     error_count = 0;
     """
     And a file named "jcov.yml" with:
