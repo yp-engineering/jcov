@@ -49,6 +49,8 @@ module JCov
           # only run coverage on files that we haven't specifically ignored
           ignore = config.ignore || []
           @coverable_files.delete_if {|file| ignore.any? {|i| file.match(i) }}
+          # remove the runner if it's in there
+          @coverable_files.delete(config.test_runner)
         end
         @coverable_files
       end

@@ -63,7 +63,7 @@ module JCov::Reporter
           percent = 100
           coverage_string = "(EMPTY)"
         end
-        if !config.test || percent > 0 # only show ran files if we're doing a focused test
+        if options.test.nil? || percent > 0 # only show ran files if we're doing a focused test
           printf "%-#{filename_length}s %-10s %3s%\n", file, coverage_string, percent
         end
       end

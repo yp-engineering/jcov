@@ -239,3 +239,6 @@ Feature: coverage
     """
     No files were checked for coverage. Maybe your ignore list in ./jcov.yml is too inclusive?
     """
+
+  @wip
+  Scenario: don't check coverage if we're running focused tests
