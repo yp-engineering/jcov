@@ -221,7 +221,7 @@ Feature: coverage
     threshold_must_match = true
     """
     When I run `jcov`
-    And the exit status should not be 0
+    Then the exit status should not be 0
 
   Scenario: gives a helpful message if no files were checked for coverage
     Given a file named "test/javascripts/runner.js" with:
@@ -240,5 +240,16 @@ Feature: coverage
     No files were checked for coverage. Maybe your ignore list in ./jcov.yml is too inclusive?
     """
 
-  @wip
   Scenario: don't check coverage if we're running focused tests
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    load("public/javascripts/foo.js");
+    error_count = 0;
+    """
+    And a file named "jcov.yml" with:
+    """
+    threshold: 80
+    """
+    When I run `jcov --test foo`
+    Then the exit status should be 0
+    And the output should not contain "FAIL"
