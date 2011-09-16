@@ -113,6 +113,10 @@ Feature: configuration
     """
     error_field: error_count
     """
+    And the output should contain:
+    """
+    report_output_directory: jcov
+    """
 
   Scenario: it prints out what file it is using
     When I run `jcov check`

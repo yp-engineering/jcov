@@ -8,4 +8,4 @@ require 'jcov/runner'
 require 'jcov/coverage'
 require 'jcov/reporter'
 require 'jcov/reporter/console_reporter'
-
+require 'jcov/reporter/html_reporter'

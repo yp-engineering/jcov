@@ -131,6 +131,10 @@ module JCov
         @reduced_coverage_data
       end
 
+      def get_binding
+        binding
+      end
+
     private
 
       def add_coverage_method_to_context

@@ -9,10 +9,11 @@ module JCov
     attr_reader :filename
 
     DEFAULTS = {
-      "test_directory"   => "test/javascripts",
-      "source_directory" => "public/javascripts",
-      "test_runner"      => "test/javascripts/runner.js",
-      "error_field"      => "error_count"
+      "test_directory"          => "test/javascripts",
+      "source_directory"        => "public/javascripts",
+      "test_runner"             => "test/javascripts/runner.js",
+      "error_field"             => "error_count",
+      "report_output_directory" => "jcov",
     }
 
     def initialize file

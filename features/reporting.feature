@@ -126,3 +126,12 @@ Feature: reporting
     """
     public/javascripts/bar.js\s+\(EMPTY\)\s+100%
     """
+
+  Scenario: reports to an HTML file
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    load("public/javascripts/foo.js");
+    error_count = 0;
+    """
+    When I run `jcov --report`
+    Then a file named "jcov/report.html" should exist
