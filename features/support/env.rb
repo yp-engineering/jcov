@@ -11,7 +11,6 @@ require 'capybara/cucumber'
 require 'capybara/session'
 
 Capybara.default_selector = :css
-Capybara.default_driver = :selenium
 
 include Capybara::DSL
 
