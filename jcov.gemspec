@@ -16,8 +16,9 @@ Gem::Specification.new do |s|
   s.add_dependency "therubyracer",    "0.9.0"
   s.add_dependency "rkelly-dmcinnes", "1.0.3"
 
-  s.add_development_dependency "cucumber", '~> 1.0'
-  s.add_development_dependency 'aruba'
+  s.add_development_dependency "cucumber",  "~> 1.0"
+  s.add_development_dependency "aruba",     "~> 0.4.6"
+  s.add_development_dependency "capybara",  "~> 1.1.1"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

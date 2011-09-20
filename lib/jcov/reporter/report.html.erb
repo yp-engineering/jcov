@@ -5,10 +5,24 @@
     <title>JCov</title>
     </meta>
     <script type="javascript">
-      window.coverage = <%= coverage_data.to_json %>;
     </script>
   </head>
   <body>
     <h1>JCov</h1>
+    <table>
+    <% coverage_data.each_pair do |filename, lines| %>
+      <tr><th>Filename</th><th>Coverage</th><th>Percent</th></tr>
+      <tr>
+        <td><%= filename %></td>
+        <td>(4/7)</td>
+        <td>57%</td>
+      </tr>
+    <% end %>
+      <tr>
+        <td><em>Total:</em></td>
+        <td>(4/7)</td>
+        <td>57%</td>
+      </tr>
+    </table>
   </body>
 </html>

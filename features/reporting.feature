@@ -1,5 +1,5 @@
 Feature: reporting
-  In order to know which code is being executed
+  In order to know how much of our code is being executed
   I want to report coverage statistics
 
   Background:
@@ -19,13 +19,13 @@ Feature: reporting
     };
 
     """
-
-  Scenario: does not show a console coverage report unless asked
-    Given a file named "test/javascripts/runner.js" with:
+    And a file named "test/javascripts/runner.js" with:
     """
     load("public/javascripts/foo.js");
     error_count = 0;
     """
+
+  Scenario: does not show a console coverage report unless asked
     When I run `jcov`
     Then the output should not contain:
     """
@@ -33,11 +33,6 @@ Feature: reporting
     """
 
   Scenario: shows a console coverage report when asked
-    Given a file named "test/javascripts/runner.js" with:
-    """
-    load("public/javascripts/foo.js");
-    error_count = 0;
-    """
     When I run `jcov --report`
     Then the output should contain:
     """
@@ -49,12 +44,7 @@ Feature: reporting
     """
 
   Scenario: reports on multiple files
-    Given a file named "test/javascripts/runner.js" with:
-    """
-    load("public/javascripts/foo.js");
-    error_count = 0;
-    """
-    And a file named "public/javascripts/bar.js" with:
+    Given a file named "public/javascripts/bar.js" with:
     """
     var foo = 1;
     var bar = 2;
@@ -71,12 +61,7 @@ Feature: reporting
     """
 
   Scenario: only report on files actually run if --test is provided
-    Given a file named "test/javascripts/runner.js" with:
-    """
-    load("public/javascripts/foo.js");
-    error_count = 0;
-    """
-    And a file named "public/javascripts/bar.js" with:
+    Given a file named "public/javascripts/bar.js" with:
     """
     var foo = 1;
     var bar = 2;
@@ -113,12 +98,7 @@ Feature: reporting
     """
 
   Scenario: reports files as empty
-    Given a file named "test/javascripts/runner.js" with:
-    """
-    load("public/javascripts/foo.js");
-    error_count = 0;
-    """
-    And a file named "public/javascripts/bar.js" with:
+    Given a file named "public/javascripts/bar.js" with:
     """
     """
     When I run `jcov --report`
@@ -126,12 +106,3 @@ Feature: reporting
     """
     public/javascripts/bar.js\s+\(EMPTY\)\s+100%
     """
-
-  Scenario: reports to an HTML file
-    Given a file named "test/javascripts/runner.js" with:
-    """
-    load("public/javascripts/foo.js");
-    error_count = 0;
-    """
-    When I run `jcov --report`
-    Then a file named "jcov/report.html" should exist
