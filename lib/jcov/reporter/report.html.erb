@@ -10,18 +10,32 @@
   <body>
     <h1>JCov</h1>
     <table>
-    <% coverage_data.each_pair do |filename, lines| %>
       <tr><th>Filename</th><th>Coverage</th><th>Percent</th></tr>
+    <%
+      all_total = 0
+      all_cover = 0
+      reduced_coverage_data.each do |filename, total, cover|
+        all_total += total
+        all_cover += cover
+
+        if (total > 0)
+          percent = 100 * cover / total
+          coverage_string = "(#{cover}/#{total})"
+        else
+          percent = 100
+          coverage_string = "(EMPTY)"
+        end
+    %>
       <tr>
         <td><%= filename %></td>
-        <td>(4/7)</td>
-        <td>57%</td>
+        <td><%= coverage_string %></td>
+        <td><%=  sprintf "%3s%", percent %></td>
       </tr>
     <% end %>
       <tr>
         <td><em>Total:</em></td>
-        <td>(4/7)</td>
-        <td>57%</td>
+        <td>(<%= all_cover %>/<%= all_total %>)</td>
+        <td><%=  sprintf "%3s%", 100 * all_cover / all_total %></td>
       </tr>
     </table>
   </body>

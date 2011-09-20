@@ -20,9 +20,18 @@ Feature: HTML Report
     };
 
     """
+
+    And a file named "public/javascripts/bar.js" with:
+    """
+    var foo = 1;
+    var bar = 2;
+    var baz = 3;
+    """
+
     And a file named "test/javascripts/runner.js" with:
     """
     load("public/javascripts/foo.js");
+    load("public/javascripts/bar.js");
     error_count = 0;
     """
 
@@ -30,8 +39,22 @@ Feature: HTML Report
     When I run `jcov --report`
     Then a file named "jcov/report.html" should exist
 
-  Scenario: the report has a list of ran files
+  Scenario: has a list of ran files
     When I run `jcov --report`
     And I open the report
-    Then I should see these values:
-      |public/javascripts/foo.js|(4/7)|57%|
+    Then I should see "public/javascripts/foo.js (4/7) 57%"
+    And I should see "public/javascripts/bar.js (3/3) 100%"
+
+  Scenario: shows the total coverage
+    When I run `jcov --report`
+    And I open the report
+    And I should see "Total: (7/10) 70%"
+
+  Scenario: shows empty source files
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    // this is a comment
+    """
+    When I run `jcov --report`
+    And I open the report
+    Then I should see "public/javascripts/foo.js (EMPTY) 100%"
