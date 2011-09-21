@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>JCov: <%= filename %></title>
+    </meta>
+    <style>
+      .line {
+        font-family: monospace;
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <% path = filename.split(/[^\/]*/).join('..') %>
+    <h1><a href="<%= path %>report.html">JCov</a> : <%= filename %></h1>
+    <table>
+      <% 
+        line_number = 0
+        content.each_line do |line|
+          line_number += 1
+      %>
+        <tr>
+          <td class="line-number"><%= line_number %></td>
+          <td class="line"><%= line %></td>
+        </tr>
+      <% end %>
+    </table>
+  </body>
+</html>

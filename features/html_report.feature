@@ -39,6 +39,11 @@ Feature: HTML Report
     When I run `jcov --report`
     Then a file named "jcov/report.html" should exist
 
+  Scenario: reports individual files to their own HTML files
+    When I run `jcov --report`
+    Then a file named "jcov/public/javascripts/foo.js.html" should exist
+    Then a file named "jcov/public/javascripts/bar.js.html" should exist
+
   Scenario: has a list of ran files
     When I run `jcov --report`
     And I open the report
@@ -58,3 +63,16 @@ Feature: HTML Report
     When I run `jcov --report`
     And I open the report
     Then I should see "public/javascripts/foo.js (EMPTY) 100%"
+
+  Scenario: click through to an individual file's report
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    Then I should see "public/javascripts/foo.js"
+
+  Scenario: can click back to the index
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    And I click "JCov"
+    Then I should be on /report.html
