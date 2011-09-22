@@ -18,7 +18,7 @@
       %>
       <tr class="line <%= line_number % 2 == 0 ? 'even' : 'odd'%>" data-coverage="<%= coverage[line_number] || 'uncoverable' %>">
           <td class="line-number"><%= line_number %></td>
-          <td class="code"><%= line %></td>
+          <td class="code"><pre><%= line %><pre></td>
         </tr>
       <% end %>
     </table>

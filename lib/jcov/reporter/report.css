@@ -34,7 +34,8 @@ table.source {
   width: 30px;
 }
 
-.line .code {
+.line .code pre {
+  display: inline;
   font-family: monospace;
   white-space: pre;
 }
