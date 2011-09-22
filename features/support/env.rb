@@ -21,5 +21,9 @@ Capybara.app = Rack::Builder.new do
   end
 end.to_app
 
+Before do
+  @aruba_timeout_seconds = 5
+end
+
 # add the lib dir to RUBYLIB so bin/jcov can find what it needs
 ENV['RUBYLIB'] = lib_dir

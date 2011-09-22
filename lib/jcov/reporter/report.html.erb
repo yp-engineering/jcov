@@ -4,20 +4,23 @@
     <meta charset='utf-8'>
     <title>JCov</title>
     </meta>
-    <script type="javascript">
-    </script>
+    <link href="report.css" media="screen" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>JCov</h1>
-    <table>
-      <tr><th>Filename</th><th>Coverage</th><th>Percent</th></tr>
     <%
       all_total = 0
       all_cover = 0
       reduced_coverage_data.each do |filename, total, cover|
         all_total += total
         all_cover += cover
-
+      end
+      total_coverage = (all_total == 0) ? "100%" : sprintf("%3s%", 100 * all_cover / all_total)
+    %>
+  <h1>JCov : <span class="total-coverage"><%= total_coverage %><span/></h1>
+    <table>
+      <tr><th>Filename</th><th>Coverage</th><th>Percent</th></tr>
+    <%
+      reduced_coverage_data.each do |filename, total, cover|
         if (total > 0)
           percent = 100 * cover / total
           coverage_string = "(#{cover}/#{total})"
@@ -35,7 +38,7 @@
       <tr>
         <td><em>Total:</em></td>
         <td>(<%= all_cover %>/<%= all_total %>)</td>
-        <td><%=  sprintf "%3s%", 100 * all_cover / all_total %></td>
+        <td><%= total_coverage %></td>
       </tr>
     </table>
   </body>

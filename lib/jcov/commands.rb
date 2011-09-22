@@ -32,10 +32,13 @@ module JCov::Commands
 
       abort "Test Failures! :(" if runner.failure_count > 0
 
-      reporter = JCov::Reporter::ConsoleReporter.new(runner)
-      html     = JCov::Reporter::HTMLReporter.new(runner)
+      if options.report
+        JCov::Reporter::HTMLReporter.new(runner).report
+      end
 
-      abort unless reporter.report && html.report
+      reporter = JCov::Reporter::ConsoleReporter.new(runner)
+
+      abort unless reporter.report
     end
   end
 

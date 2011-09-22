@@ -1,28 +1,24 @@
 <!DOCTYPE html>
+<% path = filename.split(/[^\/]*/).join('..') %>
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
     <title>JCov: <%= filename %></title>
     </meta>
-    <style>
-      .line {
-        font-family: monospace;
-        white-space: pre;
-      }
-    </style>
+    <link href="<%= path %>report.css" media="screen" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <% path = filename.split(/[^\/]*/).join('..') %>
-    <h1><a href="<%= path %>report.html">JCov</a> : <%= filename %></h1>
-    <table>
+    <% percent = (total_line_count > 0) ? 100 * covered_line_count / total_line_count : 100 %>
+    <h1><a href="<%= path %>report.html">JCov</a> : <%= filename %> : <span class="percent"><%= sprintf "%3s%", percent %></span></h1>
+    <table class="source">
       <% 
         line_number = 0
         content.each_line do |line|
           line_number += 1
       %>
-        <tr>
+      <tr class="line <%= line_number % 2 == 0 ? 'even' : 'odd'%>" data-coverage="<%= coverage[line_number] || 'uncoverable' %>">
           <td class="line-number"><%= line_number %></td>
-          <td class="line"><%= line %></td>
+          <td class="code"><%= line %></td>
         </tr>
       <% end %>
     </table>

@@ -1,0 +1,64 @@
+body {
+  background-color: #DDD;
+  font-family: 'Lucida Grande', Helvetica, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: normal;
+}
+
+a, a:visited {
+  color: #546188;
+}
+a:hover {
+  color: #242168;
+}
+
+h1 {
+  background-color: #EEE;
+  padding: 10px;
+  width: 95%;
+}
+
+h1 a {
+  text-decoration: none;
+}
+
+table.source {
+  border-spacing: 0;
+  width: 95%
+}
+
+.line .line-number {
+  font-weight: bold;
+  padding: 2px 8px;
+  width: 30px;
+}
+
+.line .code {
+  font-family: monospace;
+  white-space: pre;
+}
+
+.line.odd {
+  background: #BBDBB6;
+}
+
+.line.even {
+  background: #AACAA5;
+}
+
+.line[data-coverage="0"].odd {
+  background: #F19683;
+}
+
+.line[data-coverage="0"].even {
+  background: #E08572;
+}
+
+.line[data-coverage="uncoverable"].odd {
+  background: #E0E0E0;
+}
+
+.line[data-coverage="uncoverable"].even {
+  background: #E8E8E8;
+}

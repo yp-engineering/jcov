@@ -17,6 +17,7 @@ module JCov::Reporter
       make_output_dir
       render_index
       render_files
+      copy_css
     end
 
     private
@@ -34,8 +35,10 @@ module JCov::Reporter
     end
 
     def render_files
-      @coverage_runner.coverage_data.each_pair do |filename, lines|
+      @coverage_runner.reduced_coverage_data.each do |filename, total_line_count, covered_line_count|
+
         content = File.read(filename)
+        coverage = @coverage_runner.coverage_data[filename]
 
         erb = ERB.new(@report_file_template)
         out = erb.result(binding)
@@ -45,6 +48,10 @@ module JCov::Reporter
         filename = File.join(output_dir, filename) << ".html"
         File.open(filename, "w") { |io| io.write out }
       end
+    end
+
+    def copy_css
+      FileUtils.cp File.expand_path('../report.css', __FILE__), output_dir
     end
 
     def output_dir

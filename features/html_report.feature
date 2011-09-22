@@ -44,6 +44,10 @@ Feature: HTML Report
     Then a file named "jcov/public/javascripts/foo.js.html" should exist
     Then a file named "jcov/public/javascripts/bar.js.html" should exist
 
+  Scenario: it copies a css file
+    When I run `jcov --report`
+    Then a file named "jcov/report.css" should exist
+
   Scenario: has a list of ran files
     When I run `jcov --report`
     And I open the report
@@ -54,6 +58,11 @@ Feature: HTML Report
     When I run `jcov --report`
     And I open the report
     And I should see "Total: (7/10) 70%"
+
+  Scenario: shows the total coverage in the title
+    When I run `jcov --report`
+    And I open the report
+    And I should see "JCov : 70%"
 
   Scenario: shows empty source files
     Given a file named "public/javascripts/foo.js" with:
@@ -76,3 +85,9 @@ Feature: HTML Report
     And I click "public/javascripts/foo.js"
     And I click "JCov"
     Then I should be on /report.html
+
+  Scenario: see a file-level coverage percentage
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    Then I should see "57%"
