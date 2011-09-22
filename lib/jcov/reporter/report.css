@@ -40,26 +40,14 @@ table.source {
   white-space: pre;
 }
 
-.line.odd {
-  background: #BBDBB6;
-}
-
-.line.even {
+.line {
   background: #AACAA5;
 }
 
-.line[data-coverage="0"].odd {
-  background: #F19683;
-}
-
-.line[data-coverage="0"].even {
+.line[data-coverage="0"] {
   background: #E08572;
 }
 
-.line[data-coverage="uncoverable"].odd {
-  background: #E0E0E0;
-}
-
-.line[data-coverage="uncoverable"].even {
+.line[data-coverage="uncoverable"] {
   background: #E8E8E8;
 }
