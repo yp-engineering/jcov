@@ -6,6 +6,8 @@ Feature: HTML Report
   Background:
     Given a file named "public/javascripts/foo.js" with:
     """
+    // this is a comment
+
     var one = "foo";                  // 1
     var z = 0;                        // 2
 
@@ -91,3 +93,38 @@ Feature: HTML Report
     And I open the report
     And I click "public/javascripts/foo.js"
     Then I should see "57%"
+
+  Scenario: see covered lines
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    Then I should see these lines covered:
+      | line                      |
+      | var one = "foo";          |
+      | var z = 0;                |
+      | var two = function () {   |
+      | var three = function () { |
+
+  Scenario: see uncovered lines
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    Then I should see these lines not covered:
+      | line                           |
+      | for (var i = 0; i < 10; i++) { |
+      | z++;                           |
+      | two();                         |
+
+  Scenario: see uncoverable lines
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    Then I should see these lines uncoverable:
+      | line                           |
+      | // this is a comment           |
+
+  Scenario: it escapes HTML entities
+    When I run `jcov --report`
+    And I open the report
+    And I click "public/javascripts/foo.js"
+    Then I should see "for (var i = 0; i &lt; 10; i++)" in the HTML

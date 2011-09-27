@@ -1,6 +1,7 @@
 require 'erb'
 require 'fileutils'
 require 'json'
+require 'cgi'
 
 module JCov::Reporter
 
