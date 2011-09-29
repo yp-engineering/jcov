@@ -11,8 +11,8 @@ module JCov::Reporter
     end
 
     def report
-      report_total_coverage if total_count > 0
-      report_file_coverage if options.report
+      report_total_coverage if options.test.nil? && total_count > 0
+      report_file_coverage  if options.report
       report_error_messages
     end
 

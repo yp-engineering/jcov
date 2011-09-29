@@ -198,6 +198,7 @@ Feature: coverage
     When I run `jcov --test foo`
     Then the exit status should be 0
     And the output should not contain "FAIL"
+    And the output should not contain "Total Coverage"
 
   Scenario: functions should be reported as covered
     Given a file named "public/javascripts/foo.js" with:
