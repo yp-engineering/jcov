@@ -1,0 +1,8 @@
+---
+test_directory: tests
+source_directory: javascripts
+test_runner: jspec/runner.js
+error_field: JSpec.stats.failures
+ignore:
+- jspec
+- tests
