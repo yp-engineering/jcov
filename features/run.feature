@@ -5,7 +5,7 @@ Feature: test runner
   Scenario: runs the runner.js file
     Given a file named "test/javascripts/runner.js" with:
     """
-    print('foo');
+    println('foo');
     """
     When I run `jcov`
     Then the output should contain:
@@ -43,7 +43,7 @@ Feature: test runner
     error_count = 0;
     var t = JCov.tests;
     for (var i = 0; i < t.length; i++) {
-      print(t[i]);
+      println(t[i]);
     }
     """
     And an empty file named "test/javascripts/foo_test.js"
@@ -65,7 +65,7 @@ Feature: test runner
     error_count = 0;
     var t = JCov.tests;
     for (var i = 0; i < t.length; i++) {
-      print(t[i]);
+      println(t[i]);
     }
     """
     And an empty file named "test/javascripts/foo_test.js"
@@ -86,7 +86,7 @@ Feature: test runner
     error_count = 0;
     var t = JCov.tests;
     for (var i = 0; i < t.length; i++) {
-      print(t[i]);
+      println(t[i]);
     }
     """
     And an empty file named "test/javascripts/foo_test.js"
@@ -109,7 +109,7 @@ Feature: test runner
     And a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    print(JCov.config.threshold);
+    println(JCov.config.threshold);
     """
     When I run `jcov`
     Then the output should contain:
@@ -121,7 +121,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    print(JCov.options.verbose);
+    println(JCov.options.verbose);
     """
     When I run `jcov --verbose`
     Then the output should contain:
@@ -133,7 +133,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    print(JCov.options.color);
+    println(JCov.options.color);
     """
     When I run `jcov --no-color`
     Then the output should contain:
@@ -145,7 +145,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    print(JCov.options.color);
+    println(JCov.options.color);
     """
     When I run `jcov --color`
     Then the output should contain:
@@ -157,7 +157,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    print(JCov.options.color);
+    println(JCov.options.color);
     """
     When I run `jcov`
     Then the output should contain:

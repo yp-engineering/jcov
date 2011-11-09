@@ -5,12 +5,26 @@ Feature: javascript interface
   Scenario: I want to print a line
     Given a file named "test/javascripts/runner.js" with:
     """
-    print('foo');
+    println('foo');
+    println('bar');
     """
     When I run `jcov`
     Then the output should contain:
     """
     foo
+    bar
+    """
+
+  Scenario: I want to print a line without a carrage return
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    print('foo');
+    print('bar');
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    foobar
     """
 
   Scenario: I want to print a single character

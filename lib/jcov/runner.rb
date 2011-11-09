@@ -26,8 +26,12 @@ module JCov
       @tests
     end
 
-    def print *s
-      puts s
+    def print s
+      Kernel.print s
+    end
+
+    def println *s
+      Kernel.puts s
     end
 
     def load file
@@ -79,6 +83,7 @@ module JCov
     def setup_method_proxies
       # these will become global methods in the context
       %w{print
+         println
          load
          readFile
          putc}.each do |method|

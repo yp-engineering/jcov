@@ -21,15 +21,7 @@ var complete = function (runner) {
   results = runner.results().failedCount;
 };
 
-// TODO put this ability into jcov itself
-var printNoNewline = function (string) {
-  var length = string.length;
-  for (var i = 0; i < length; i++) {
-    putc(string.charAt(i));
-  }
-};
-
-var reporter = new jasmine.ConsoleReporter(printNoNewline, complete, JCov.options.color);
+var reporter = new jasmine.ConsoleReporter(print, complete, JCov.options.color);
 
 jasmineEnv.addReporter(reporter);
 

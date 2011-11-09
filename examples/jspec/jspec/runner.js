@@ -1,3 +1,6 @@
+// JSpec reporter uses print as println
+print = println;
+
 load('jspec/lib/jspec.js');
 
 load('jspec/ext/slowness.js')
