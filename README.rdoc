@@ -3,7 +3,9 @@
 Coverage reports on your Javascript tests!
 
 Supports:
+* Jasmine
 * JSpec
+* Any other Javascript with a custom runner file.
 
 == Installation
 
@@ -11,7 +13,97 @@ gem install jcov
 
 == Getting Started
 
+There are both JSpec and Jasmine example projects in the examples directory -- these are a good place to start.
+
+You will need at least a Javascript runner file for JCov to work.
+
+=== Command Line
+
+<b>jcov run</b>:: Runs the tests. Also the default command (just type 'jcov')
+<b>jcov check</b>:: Check the configuration.
+<b>jcov help</b>:: Show help docs.
+
+
+Global Options:
+  -c, --config FILE    Specify a configuration file to use 
+  -h, --help           Display help documentation 
+  -v, --version        Display version information 
+  -t, --trace          Display backtrace when an error occurs 
+
+Run Options:
+  -t, --test REGEX     Limit the tests to only the ones that match the regular expression 
+  --verbose            Verbose test execution 
+  --[no-]color         Enable/Disable color output -- default enabled when executed from the command-line 
+  --[no-]coverage      Enable/Disable coverage output -- default enabled 
+  --report             Report test coverage 
+
+Running with the --report switch will output an HTML coverage report that shows line-by-line coverage.
+
+If your testing framework supports color output your runner file must pass the color boolean value from the JCov object (JCov.options.color) to the framework (see the Jasmine and JCov examples).
+
+The --verbose switch is another option your framework must support (see the JCov example).
+
+Run will also return with a non-zero code when the tests don't pass so it can be easily integrated into continuous integration suites.
+
+=== jcov.yaml
+Configure JCov by creating a jcov.yaml file.
+JCov also has some "intelligent" defaults and you can see the how the jcov.yaml file works with those defaults using the check command to output the combined configuration:
+
+<b>jcov check</b>
+
+JCov will look for the jcov.yaml file in a +config+ directory and the current directory.
+
+Example jcov check output:
+  Using configuration file: ./jcov.yml
+  --- 
+  test_directory: tests
+  source_directory: javascripts
+  test_runner: jasmine/runner.js
+  error_field: results
+  report_output_directory: jcov
+  ignore: 
+  - jasmine
+  - tests
+
+==== Configuration Keys
+
++test_directory+:: Where the test files are kept. (Default _test/javascripts_)
++source_directory+:: Where the source files are kept. (Default _public/javascripts_)
++test_runner+:: The Javascript file JCov executes to run your tests. (Default _test/javascripts/runner.js_)
++error_field+:: The Javascript variable that JCov examines to find out how many failures occurred while running the test suite. (Default <em>error_count</em>)
++report_output_directory+:: Where the HTML coverage reports will be written. (Default _jcov_)
+
+=== Runner Files
+
+You will need a Javascript runner file to tell JCov how to run your tests.
+This is usually a simple script that loads your testing framework, the source and test files, and calls whatever execute() method your framework needs. After the tests are run it needs to This is intentionally left open to make it easier for JCov to support arbitrary frameworks.
+
+See the examples directory for examples.
+
+==== Runner API
+
+JCov provides some methods and a data object to the runner file.
+
+- The JCov object
+  - <b>JCov.tests</b>: An Array of tests to execute (the list of everything from your test directory filtered by the --test switch)
+  - <b>JCov.config</b>: The configuration loaded from jcov.yaml (see above)
+  - <b>JCov.options</b>: Passed in command line options (see above)
+
+- Global Methods
+  - <b>print()</b>: Print to the console.
+  - <b>println()</b>: Print to the console with a carriage return.
+  - <b>load()</b>: load and execute the given file.
+  - <b>readFile()</b>: load file and return it as a string.
+  - <b>putc()</b>: Print a single character to the console.
+
+=== Headless Browser Testing
+
+Headless browser testing can be supported with something like the {env.js project}[https://github.com/thatcher/env-js] which mimics the browser/DOM interface in a pure Javascript way.
+
+== Maintainers
+
+- {Doug McInnes}[mailto:dmcinnes@attinteractive.com]
+
 == License
 
-JCov is licensed under the MIT License with one addition: 
-  The Software shall be used for Good, not Evil.
+Copyright (c) AT&T Interactive 2011.  JCov is licensed under the MIT License.
