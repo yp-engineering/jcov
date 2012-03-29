@@ -67,11 +67,11 @@ Example jcov check output:
 
 ==== Configuration Keys
 
-+test_directory+:: Where the test files are kept. (Default _test/javascripts_)
-+source_directory+:: Where the source files are kept. (Default _public/javascripts_)
-+test_runner+:: The Javascript file JCov executes to run your tests. (Default _test/javascripts/runner.js_)
-+error_field+:: The Javascript variable that JCov examines to find out how many failures occurred while running the test suite. (Default <em>error_count</em>)
-+report_output_directory+:: Where the HTML coverage reports will be written. (Default _jcov_)
++test_directory+:: Where the test files are kept. (Default *test/javascripts*)
++source_directory+:: Where the source files are kept. (Default *public/javascripts*)
++test_runner+:: The Javascript file JCov executes to run your tests. (Default *test/javascripts/runner.js*)
++error_field+:: The Javascript variable that JCov examines to find out how many failures occurred while running the test suite. (Default *error_count*)
++report_output_directory+:: Where the HTML coverage reports will be written. (Default *jcov*)
 
 === Runner Files
 
@@ -106,4 +106,4 @@ Headless browser testing can be supported with something like the {env.js projec
 
 == License
 
-Copyright (c) AT&T Interactive 2011.  JCov is licensed under the MIT License.
+Copyright (c) AT&T Interactive 2012.  JCov is licensed under the MIT License.
