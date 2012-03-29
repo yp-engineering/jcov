@@ -1,3 +1,17 @@
+RSpec::Matchers.define :have_line do |this_line|
+  match do |lines|
+    regex = Regexp.new(Regexp.escape(this_line))
+    lines.any? {|line| line =~ regex}.should be_true
+  end
+  failure_message_for_should do |list|
+    # generate and return the appropriate string.
+    "did not find \"#{this_line}\""
+  end
+  failure_message_for_should_not do |list|
+    "found \"#{this_line}\""
+  end
+end
+
 Given /^I open the report$/ do
   visit "/report.html"
 end
@@ -26,8 +40,7 @@ Then /^I should see these lines (covered|not covered|uncoverable):$/ do |type, t
 
   # interate over the list and see if they match
   table.hashes.each do |row|
-    regex = Regexp.new(Regexp.escape(row[:line]))
-    lines.any? {|line| line =~ regex}.should be_true("didn't find \"#{row[:line]}\" in the list of #{type} lines")
+    lines.should have_line(row[:line])
   end
 end
 
