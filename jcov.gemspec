@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "commander",    "~> 4.0"
   s.add_dependency "therubyracer", "= 0.9.0"
-  s.add_dependency "rkelly",       "~> 1.0.4"
+  s.add_dependency "rkelly-dmcinnes",       "~> 1.0.4.1"
 
   s.add_development_dependency "cucumber",  "~> 1.0"
   s.add_development_dependency "aruba",     "~> 0.4.6"
