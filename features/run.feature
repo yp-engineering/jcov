@@ -80,6 +80,50 @@ Feature: test runner
     test/javascripts/foo_test.js
     """
 
+  Scenario: allows the user to run a focused test without the --test switch
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    var t = JCov.tests;
+    for (var i = 0; i < t.length; i++) {
+      println(t[i]);
+    }
+    """
+    And an empty file named "test/javascripts/foo_test.js"
+    And an empty file named "test/javascripts/wazzle/bar_test.js"
+    When I run `jcov test/javascripts/wazzle/bar_test.js`
+    Then the output should contain:
+    """
+    test/javascripts/wazzle/bar_test.js
+    """
+    And the output should not contain:
+    """
+    test/javascripts/foo_test.js
+    """
+
+  Scenario: allows the user to run multiple focused tests
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    var t = JCov.tests;
+    for (var i = 0; i < t.length; i++) {
+      println(t[i]);
+    }
+    """
+    And an empty file named "test/javascripts/foo_test.js"
+    And an empty file named "test/javascripts/wazzle/bar_test.js"
+    And an empty file named "test/javascripts/furble/baz_test.js"
+    When I run `jcov test/javascripts/wazzle/bar_test.js test/javascripts/furble/baz_test.js`
+    Then the output should contain:
+    """
+    test/javascripts/furble/baz_test.js
+    test/javascripts/wazzle/bar_test.js
+    """
+    And the output should not contain:
+    """
+    test/javascripts/foo_test.js
+    """
+
   Scenario: allows the user to match tests with a regex
     Given a file named "test/javascripts/runner.js" with:
     """

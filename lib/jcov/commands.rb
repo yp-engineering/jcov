@@ -24,7 +24,9 @@ module JCov::Commands
       options.default :color    => $stdout.tty?
       options.default :coverage => true
 
-      config = JCov::Configuration.new options.config
+      options.args = args
+
+      config = JCov::Configuration.new(options.config)
 
       runner = JCov::Coverage::CoverageRunner.new(config, options)
 

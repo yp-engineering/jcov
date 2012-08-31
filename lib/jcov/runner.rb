@@ -15,7 +15,11 @@ module JCov
     def tests
       # which tests shall we run?
       if @tests.nil?
-        @tests = Dir.glob(File.join(config.test_directory, "**", "*.js"))
+        if options.args.size > 0
+          @tests = options.args
+        else
+          @tests = Dir.glob(File.join(config.test_directory, "**", "*.js"))
+        end
         if options.test # limit to a single or group of tests
           @tests = @tests.grep(/#{options.test}/)
         end
