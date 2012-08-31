@@ -7,6 +7,11 @@ program :version, JCov::VERSION
 program :description, 'Run coverage reports on Javascript'
 program :help_formatter, :compact
 
+global_option '--verbose', 'Verbose test execution'
+global_option '--[no-]color', 'Enable/Disable color output -- default enabled'
+global_option '--[no-]coverage', 'Enable/Disable coverage output -- default enabled'
+global_option '--report', 'Report test coverage'
+global_option '--test REGEX', 'Limit the tests to only the ones that match the regular expression'
 global_option '-c', '--config FILE', 'Specify a configuration file to use'
 
 default_command :run
@@ -21,11 +26,6 @@ end
 
 command :run do |c|
   c.syntax      = 'jcov run [options]'
-  c.option        '-t', '--test REGEX', 'Limit the tests to only the ones that match the regular expression'
-  c.option        '--verbose', 'Verbose test execution'
-  c.option        '--[no-]color', 'Enable/Disable color output -- default enabled when executed from the command-line'
-  c.option        '--[no-]coverage', 'Enable/Disable coverage output -- default enabled'
-  c.option        '--report', 'Report test coverage'
   c.summary     = 'Run the tests (default action)'
   c.description = 'Run the tests and report on coverage'
   c.example       'Run the tests', 'jcov run'
