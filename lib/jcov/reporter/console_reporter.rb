@@ -11,9 +11,12 @@ module JCov::Reporter
     end
 
     def report
-      report_total_coverage if options.test.nil? && total_count > 0
-      report_file_coverage  if options.report
-      report_error_messages
+      # report a warning message if we're not checking any files for coverage
+      puts "No files were checked for coverage. Maybe your ignore list in #{config.filename} is too inclusive?" if total_count == 0
+      report_file_coverage    if options.report
+      report_total_coverage   if report_coverage?
+      report_threshold_errors if report_coverage? && config.threshold
+      passed?
     end
 
     private
@@ -26,27 +29,29 @@ module JCov::Reporter
       @coverage_runner.options
     end
 
-    # don't report anything if we're running a focused test
-    # report a warning message if we're not checking any files for coverage
+    def report_coverage?
+      options.coverage && options.test.nil? && options.args.empty? && total_count > 0
+    end
+
+    # passes if any are true:
+    # 1. we're not checking a threshold
+    # 2. thresholds must match and they do
+    # 3. coverage percent is greater than or equal to threshold
+    def passed?
+      config.threshold.nil? ||
+      (config.threshold_must_match && percent == config.threshold) ||
+      percent >= config.threshold
+    end
+
     # report an under threshold error
     # report an over threshold error if threshold_must_match is set to true
-    def report_error_messages
-      if options.test.nil?
-        if options.coverage && total_count == 0
-          puts "No files were checked for coverage. Maybe your ignore list in #{config.filename} is too inclusive?"
-        elsif options.coverage && config.threshold
-          if percent < config.threshold
-            puts "FAIL! Coverage is lower than threshold! #{percent}% < #{config.threshold}% :("
-            return false
-          elsif config.threshold_must_match && percent != config.threshold
-            puts "Coverage does not match threshold! #{percent}% != #{config.threshold}%"
-            puts "Please raise the threshold in #{config.filename}"
-            return false
-          end
-        end
+    def report_threshold_errors
+      if percent < config.threshold
+        puts "FAIL! Coverage is lower than threshold! #{percent}% < #{config.threshold}% :("
+      elsif config.threshold_must_match && percent != config.threshold
+        puts "Coverage does not match threshold! #{percent}% != #{config.threshold}%"
+        puts "Please raise the threshold in #{config.filename}"
       end
-
-      true
     end
 
     def report_total_coverage

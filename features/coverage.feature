@@ -195,10 +195,21 @@ Feature: coverage
     """
     threshold: 80
     """
-    When I run `jcov --test foo`
-    Then the exit status should be 0
+    When I run `jcov public/javascripts/foo.js`
+    Then the exit status should be 1
     And the output should not contain "FAIL"
     And the output should not contain "Total Coverage"
+
+  Scenario: don't check coverage if we're running regex focused tests
+    Given a file named "jcov.yml" with:
+    """
+    threshold: 80
+    """
+    When I run `jcov --test foo`
+    Then the exit status should be 1
+    And the output should not contain "FAIL"
+    And the output should not contain "Total Coverage"
+
 
   Scenario: functions should be reported as covered
     Given a file named "public/javascripts/foo.js" with:
