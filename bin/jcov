@@ -8,8 +8,9 @@ program :description, 'Run coverage reports on Javascript'
 program :help_formatter, :compact
 
 global_option '--verbose', 'Verbose test execution'
-global_option '--[no-]color', 'Enable/Disable color output -- default enabled'
-global_option '--[no-]coverage', 'Enable/Disable coverage output -- default enabled'
+global_option '--color', 'Enable color output (disabled on non-tty output)'
+global_option '--no-color', 'Disable color output'
+global_option '--no-coverage', 'Disable coverage output'
 global_option '--report', 'Report test coverage'
 global_option '--test REGEX', 'Limit the tests to only the ones that match the regular expression'
 global_option '-c', '--config FILE', 'Specify a configuration file to use'
