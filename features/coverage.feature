@@ -32,6 +32,13 @@ Feature: coverage
     Total Coverage: (4/7) 57.1%
     """
 
+  Scenario: it will not report coverage when disabled
+    When I run `jcov --no-coverage`
+    Then the output should not contain:
+    """
+    Total Coverage:
+    """
+
   Scenario: it will report slightly more coverage
     Given a file named "test/javascripts/runner.js" with:
     """

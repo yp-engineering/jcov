@@ -32,8 +32,9 @@ module JCov::Reporter
       @coverage_runner.options
     end
 
+    # no_coverage.nil? because no_coverage gets set to false when set because it's prefixed as 'no'
     def report_coverage?
-      options.report || options.coverage && options.test.nil? && options.args.empty?
+      options.report || options.no_coverage.nil? && options.coverage && options.test.nil? && options.args.empty?
     end
 
     # passes if any are true:
