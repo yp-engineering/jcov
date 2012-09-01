@@ -11,7 +11,7 @@ module JCov::Reporter
     end
 
     def report
-      if total_count == 0
+      if total_count && total_count == 0
         # report a warning message if we're not checking any files for coverage
         puts "No files were checked for coverage. Maybe your ignore list in #{config.filename} is too inclusive?"
       elsif report_coverage?
