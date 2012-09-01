@@ -7,15 +7,18 @@ module JCov::Reporter
     def initialize coverage_runner
       @coverage_runner = coverage_runner
 
-      calculate_total_coverage
+      calculate_total_coverage if report_coverage?
     end
 
     def report
-      # report a warning message if we're not checking any files for coverage
-      puts "No files were checked for coverage. Maybe your ignore list in #{config.filename} is too inclusive?" if total_count == 0
-      report_file_coverage    if options.report
-      report_total_coverage   if report_coverage?
-      report_threshold_errors if report_coverage? && config.threshold
+      if total_count == 0
+        # report a warning message if we're not checking any files for coverage
+        puts "No files were checked for coverage. Maybe your ignore list in #{config.filename} is too inclusive?"
+      elsif report_coverage?
+        report_file_coverage    if options.report
+        report_total_coverage
+        report_threshold_errors if config.threshold
+      end
       passed?
     end
 
@@ -30,7 +33,7 @@ module JCov::Reporter
     end
 
     def report_coverage?
-      options.coverage && options.test.nil? && options.args.empty? && total_count > 0
+      options.report || options.coverage && options.test.nil? && options.args.empty?
     end
 
     # passes if any are true:
