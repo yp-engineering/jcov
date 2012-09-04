@@ -2,9 +2,16 @@ Feature: test runner
   In order to test my Javascript without opening a browser
   I want to use a tool that runs my tests headless.
 
+  Background:
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var z = 0;
+    """
+
   Scenario: runs the runner.js file
     Given a file named "test/javascripts/runner.js" with:
     """
+    load("public/javascripts/foo.js");
     println('foo');
     """
     When I run `jcov`

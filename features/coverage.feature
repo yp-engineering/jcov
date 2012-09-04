@@ -203,7 +203,7 @@ Feature: coverage
     threshold: 80
     """
     When I run `jcov public/javascripts/foo.js`
-    Then the exit status should be 1
+    Then the exit status should be 0
     And the output should not contain "FAIL"
     And the output should not contain "Total Coverage"
 
@@ -213,7 +213,7 @@ Feature: coverage
     threshold: 80
     """
     When I run `jcov --test foo`
-    Then the exit status should be 1
+    Then the exit status should be 0
     And the output should not contain "FAIL"
     And the output should not contain "Total Coverage"
 

@@ -18,8 +18,10 @@ module JCov::Reporter
         report_file_coverage    if options.report
         report_total_coverage
         report_threshold_errors if config.threshold
+        passed?
+      else
+        true
       end
-      passed?
     end
 
     private
