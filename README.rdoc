@@ -102,8 +102,8 @@ Headless browser testing can be supported with something like the {env.js projec
 
 == Maintainers
 
-- {Doug McInnes}[mailto:dmcinnes@attinteractive.com]
+- {Doug McInnes}[mailto:dmcinnes@yp.com]
 
 == License
 
-Copyright (c) AT&T Interactive 2012.  JCov is licensed under the MIT License.
+Copyright (c) YP Intellectual Property, LLC 2012.  JCov is licensed under the MIT License.
