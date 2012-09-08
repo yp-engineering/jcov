@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = JCov::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Doug McInnes"]
-  s.email       = ["dmcinnes@attinteractive.com"]
+  s.email       = ["dmcinnes@yp.com"]
   s.homepage    = ""
   s.summary     = %q{Javascript Coverage Tool}
   s.description = %q{Javascript Coverage Tool}
