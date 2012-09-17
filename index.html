@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="JCov : Coverage reports on your Javascript tests" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>JCov</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/yp-engineering/jcov">View on GitHub</a>
+
+          <h1 id="project_title">JCov</h1>
+          <h2 id="project_tagline">Coverage reports on your Javascript tests</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/yp-engineering/jcov/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/yp-engineering/jcov/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>Supports:</p>
+
+<ul>
+<li>Jasmine</li>
+<li>JSpec</li>
+<li>Any other Javascript with a custom runner file.</li>
+</ul><h2>Installation</h2>
+
+<p>gem install jcov</p>
+
+<h2>Getting Started</h2>
+
+<p>There are both JSpec and Jasmine example projects in the examples directory -- these are a good place to start.</p>
+
+<p>You will need at least a Javascript runner file for JCov to work.</p>
+
+<h3>Command Line</h3>
+
+<p><b>jcov run</b>:: Runs the tests. Also the default command (just type 'jcov')
+<b>jcov check</b>:: Check the configuration.
+<b>jcov help</b>:: Show help docs.</p>
+
+<p>Global Options:
+  -c, --config FILE    Specify a configuration file to use 
+  -h, --help           Display help documentation 
+  -v, --version        Display version information 
+  -t, --trace          Display backtrace when an error occurs </p>
+
+<p>Run Options:
+  -t, --test REGEX     Limit the tests to only the ones that match the regular expression 
+  --verbose            Verbose test execution 
+  --[no-]color         Enable/Disable color output -- default enabled when executed from the command-line 
+  --[no-]coverage      Enable/Disable coverage output -- default enabled 
+  --report             Report test coverage </p>
+
+<p>Running with the --report switch will output an HTML coverage report that shows line-by-line coverage.</p>
+
+<p>If your testing framework supports color output your runner file must pass the color boolean value from the JCov object (JCov.options.color) to the framework (see the Jasmine and JCov examples).</p>
+
+<p>The --verbose switch is another option your framework must support (see the JCov example).</p>
+
+<p>Run will also return with a non-zero code when the tests don't pass so it can be easily integrated into continuous integration suites.</p>
+
+<h3>jcov.yaml</h3>
+
+<p>Configure JCov by creating a jcov.yaml file.
+JCov also has some "intelligent" defaults and you can see the how the jcov.yaml file works with those defaults using the check command to output the combined configuration:</p>
+
+<p><b>jcov check</b></p>
+
+<p>JCov will look for the jcov.yaml file in a +config+ directory and the current directory.</p>
+
+<p>Example jcov check output:
+  Using configuration file: ./jcov.yml</p>
+
+<hr><p>test_directory: tests
+  source_directory: javascripts
+  test_runner: jasmine/runner.js
+  error_field: results
+  report_output_directory: jcov
+  ignore: </p>
+
+<ul>
+<li>jasmine</li>
+<li>tests</li>
+</ul><h4>Configuration Keys</h4>
+
+<p>+test_directory+:: Where the test files are kept. (Default <em>test/javascripts</em>)
++source_directory+:: Where the source files are kept. (Default <em>public/javascripts</em>)
++test_runner+:: The Javascript file JCov executes to run your tests. (Default <em>test/javascripts/runner.js</em>)
++error_field+:: The Javascript variable that JCov examines to find out how many failures occurred while running the test suite. (Default <em>error_count</em>)
++report_output_directory+:: Where the HTML coverage reports will be written. (Default <em>jcov</em>)</p>
+
+<h3>Runner Files</h3>
+
+<p>You will need a Javascript runner file to tell JCov how to run your tests.
+This is usually a simple script that loads your testing framework, the source and test files, and calls whatever execute() method your framework needs. After the tests are run it needs to This is intentionally left open to make it easier for JCov to support arbitrary frameworks.</p>
+
+<p>See the examples directory for examples.</p>
+
+<h4>Runner API</h4>
+
+<p>JCov provides some methods and a data object to the runner file.</p>
+
+<ul>
+<li>
+<p>The JCov object</p>
+
+<ul>
+<li>
+<b>JCov.tests</b>: An Array of tests to execute (the list of everything from your test directory filtered by the --test switch)</li>
+<li>
+<b>JCov.config</b>: The configuration loaded from jcov.yaml (see above)</li>
+<li>
+<b>JCov.options</b>: Passed in command line options (see above)</li>
+</ul>
+</li>
+<li>
+<p>Global Methods</p>
+
+<ul>
+<li>
+<b>print()</b>: Print to the console.</li>
+<li>
+<b>println()</b>: Print to the console with a carriage return.</li>
+<li>
+<b>load()</b>: load and execute the given file.</li>
+<li>
+<b>readFile()</b>: load file and return it as a string.</li>
+<li>
+<b>putc()</b>: Print a single character to the console.</li>
+</ul>
+</li>
+</ul><h3>Headless Browser Testing</h3>
+
+<p>Headless browser testing can be supported with something like the {env.js project}[<a href="https://github.com/thatcher/env-js">https://github.com/thatcher/env-js</a>] which mimics the browser/DOM interface in a pure Javascript way.</p>
+
+<h2>Maintainers</h2>
+
+<ul>
+<li>{Doug McInnes}[mailto:<a href="mailto:dmcinnes@yp.com">dmcinnes@yp.com</a>]</li>
+</ul><h2>License</h2>
+
+<p>Copyright (c) YP Intellectual Property, LLC 2012.  JCov is licensed under the MIT License.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">JCov maintained by <a href="https://github.com/yp-engineering">yp-engineering</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
