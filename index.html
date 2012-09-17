@@ -49,28 +49,35 @@
 
 <h3>Command Line</h3>
 
-<p><b>jcov run</b>:: Runs the tests. Also the default command (just type 'jcov')
-<b>jcov check</b>:: Check the configuration.
-<b>jcov help</b>:: Show help docs.</p>
+<ul>
+<li>
+<strong>jcov run</strong>: Runs the tests. Also the default command (just type 'jcov')</li>
+<li>
+<strong>jcov check</strong>: Check the configuration.</li>
+<li>
+<strong>jcov help</strong>: Show help docs.</li>
+</ul><p>Global Options:</p>
 
-<p>Global Options:
-  -c, --config FILE    Specify a configuration file to use 
-  -h, --help           Display help documentation 
-  -v, --version        Display version information 
-  -t, --trace          Display backtrace when an error occurs </p>
+<pre><code>-c, --config FILE    Specify a configuration file to use 
+-h, --help           Display help documentation 
+-v, --version        Display version information 
+-t, --trace          Display backtrace when an error occurs 
+</code></pre>
 
-<p>Run Options:
-  -t, --test REGEX     Limit the tests to only the ones that match the regular expression 
-  --verbose            Verbose test execution 
-  --[no-]color         Enable/Disable color output -- default enabled when executed from the command-line 
-  --[no-]coverage      Enable/Disable coverage output -- default enabled 
-  --report             Report test coverage </p>
+<p>Run Options:</p>
 
-<p>Running with the --report switch will output an HTML coverage report that shows line-by-line coverage.</p>
+<pre><code>-t, --test REGEX     Limit the tests to only the ones that match the regular expression 
+--verbose            Verbose test execution 
+--[no-]color         Enable/Disable color output -- default enabled when executed from the command-line 
+--[no-]coverage      Enable/Disable coverage output -- default enabled 
+--report             Report test coverage 
+</code></pre>
 
-<p>If your testing framework supports color output your runner file must pass the color boolean value from the JCov object (JCov.options.color) to the framework (see the Jasmine and JCov examples).</p>
+<p>Running with the <code>--report</code> switch will output an HTML coverage report that shows line-by-line coverage.</p>
 
-<p>The --verbose switch is another option your framework must support (see the JCov example).</p>
+<p>If your testing framework supports color output your runner file must pass the color boolean value from the JCov object (<code>JCov.options.color</code>) to the framework (see the Jasmine and JCov examples).</p>
+
+<p>The <code>--verbose</code> switch is another option your framework must support (see the JCov example).</p>
 
 <p>Run will also return with a non-zero code when the tests don't pass so it can be easily integrated into continuous integration suites.</p>
 
@@ -79,35 +86,37 @@
 <p>Configure JCov by creating a jcov.yaml file.
 JCov also has some "intelligent" defaults and you can see the how the jcov.yaml file works with those defaults using the check command to output the combined configuration:</p>
 
-<p><b>jcov check</b></p>
+<pre><code>jcov check
+</code></pre>
 
-<p>JCov will look for the jcov.yaml file in a +config+ directory and the current directory.</p>
+<p>JCov will look for the jcov.yaml file in a <code>config</code> directory and the current directory.</p>
 
-<p>Example jcov check output:
-  Using configuration file: ./jcov.yml</p>
+<p>Example jcov check output:</p>
 
-<hr><p>test_directory: tests
-  source_directory: javascripts
-  test_runner: jasmine/runner.js
-  error_field: results
-  report_output_directory: jcov
-  ignore: </p>
+<pre><code>Using configuration file: ./jcov.yml
+--- 
+test_directory: tests
+source_directory: javascripts
+test_runner: jasmine/runner.js
+error_field: results
+report_output_directory: jcov
+ignore: 
+- jasmine
+- tests
+</code></pre>
 
-<ul>
-<li>jasmine</li>
-<li>tests</li>
-</ul><h4>Configuration Keys</h4>
+<h4>Configuration Keys</h4>
 
-<p>+test_directory+:: Where the test files are kept. (Default <em>test/javascripts</em>)
-+source_directory+:: Where the source files are kept. (Default <em>public/javascripts</em>)
-+test_runner+:: The Javascript file JCov executes to run your tests. (Default <em>test/javascripts/runner.js</em>)
-+error_field+:: The Javascript variable that JCov examines to find out how many failures occurred while running the test suite. (Default <em>error_count</em>)
-+report_output_directory+:: Where the HTML coverage reports will be written. (Default <em>jcov</em>)</p>
+<p><code>test_directory</code>: Where the test files are kept. (Default <em>test/javascripts</em>)
+<code>source_directory</code>: Where the source files are kept. (Default <em>public/javascripts</em>)
+<code>test_runner</code>: The Javascript file JCov executes to run your tests. (Default <em>test/javascripts/runner.js</em>)
+<code>error_field</code>: The Javascript variable that JCov examines to find out how many failures occurred while running the test suite. (Default <em>error_count</em>)
+<code>report_output_directory</code>: Where the HTML coverage reports will be written. (Default <em>jcov</em>)</p>
 
 <h3>Runner Files</h3>
 
 <p>You will need a Javascript runner file to tell JCov how to run your tests.
-This is usually a simple script that loads your testing framework, the source and test files, and calls whatever execute() method your framework needs. After the tests are run it needs to This is intentionally left open to make it easier for JCov to support arbitrary frameworks.</p>
+This is usually a simple script that loads your testing framework, the source and test files, and calls whatever <code>execute()</code> method your framework needs. After the tests are run it needs to This is intentionally left open to make it easier for JCov to support arbitrary frameworks.</p>
 
 <p>See the examples directory for examples.</p>
 
@@ -121,11 +130,11 @@ This is usually a simple script that loads your testing framework, the source an
 
 <ul>
 <li>
-<b>JCov.tests</b>: An Array of tests to execute (the list of everything from your test directory filtered by the --test switch)</li>
+<code>JCov.tests</code>: An Array of tests to execute (the list of everything from your test directory filtered by the <code>--test</code> switch)</li>
 <li>
-<b>JCov.config</b>: The configuration loaded from jcov.yaml (see above)</li>
+<code>JCov.config</code>: The configuration loaded from jcov.yaml (see above)</li>
 <li>
-<b>JCov.options</b>: Passed in command line options (see above)</li>
+<code>JCov.options</code>: Passed in command line options (see above)</li>
 </ul>
 </li>
 <li>
@@ -133,26 +142,22 @@ This is usually a simple script that loads your testing framework, the source an
 
 <ul>
 <li>
-<b>print()</b>: Print to the console.</li>
+<code>print()</code>: Print to the console.</li>
 <li>
-<b>println()</b>: Print to the console with a carriage return.</li>
+<code>println()</code>: Print to the console with a carriage return.</li>
 <li>
-<b>load()</b>: load and execute the given file.</li>
+<code>load()</code>: load and execute the given file.</li>
 <li>
-<b>readFile()</b>: load file and return it as a string.</li>
+<code>readFile()</code>: load file and return it as a string.</li>
 <li>
-<b>putc()</b>: Print a single character to the console.</li>
+<code>putc()</code>: Print a single character to the console.</li>
 </ul>
 </li>
 </ul><h3>Headless Browser Testing</h3>
 
-<p>Headless browser testing can be supported with something like the {env.js project}[<a href="https://github.com/thatcher/env-js">https://github.com/thatcher/env-js</a>] which mimics the browser/DOM interface in a pure Javascript way.</p>
+<p>Headless browser testing can be supported with something like the <a href="https://github.com/thatcher/env-js">env.js project</a> which mimics the browser/DOM interface in a pure Javascript way.</p>
 
-<h2>Maintainers</h2>
-
-<ul>
-<li>{Doug McInnes}[mailto:<a href="mailto:dmcinnes@yp.com">dmcinnes@yp.com</a>]</li>
-</ul><h2>License</h2>
+<h2>License</h2>
 
 <p>Copyright (c) YP Intellectual Property, LLC 2012.  JCov is licensed under the MIT License.</p>
       </section>
