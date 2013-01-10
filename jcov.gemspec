@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{Javascript Coverage Tool}
 
   s.add_dependency "commander",    "~> 4.0"
-  s.add_dependency "therubyracer", "= 0.9.0"
+  s.add_dependency "therubyracer", "~> 0.11.1"
   s.add_dependency "rkelly",       "~> 1.0.4"
 
   s.add_development_dependency "cucumber",  "~> 1.0"
