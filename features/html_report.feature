@@ -17,9 +17,9 @@ Feature: HTML Report
       }
     };
 
-    var three = function () {         // 6
+    function three() {                // 6
       two();                          // 7
-    };
+    }
 
     """
 
@@ -103,7 +103,7 @@ Feature: HTML Report
       | var one = "foo";          |
       | var z = 0;                |
       | var two = function () {   |
-      | var three = function () { |
+      | function three() {        |
 
   Scenario: see uncovered lines
     When I run `jcov --report`

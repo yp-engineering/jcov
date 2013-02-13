@@ -1,8 +1,8 @@
 module JCov
   module Coverage
 
-    # extend RKelly's ECMAVisitor to include our coverage_tick
-    class CoverageVisitor < RKelly::Visitors::ECMAVisitor
+    # Make our own RKelly's Visitor
+    class CoverageVisitor < RKelly::Visitors::Visitor
       def initialize(coverage)
         @coverage = coverage
         @indent = 0
@@ -10,13 +10,20 @@ module JCov
 
       # whenever we hit a line, add the instrumentation
       def visit_SourceElementsNode(o)
-        o.value.map { |x|
-          if (x.filename && x.line)
-            coverage = "_coverage_tick('#{x.filename}', #{x.line});"
-            @coverage[x.filename][x.line] = 0
-          end
-          "#{coverage || ""}#{indent}#{x.accept(self)}"
-        }.join("\n")
+        o.value.each do |x|
+          # function statements are given the wrong line numbers
+          # line = if x.is_a?(RKelly::Nodes::ExpressionStatementNode) &&
+          #           x.value.is_a?(RKelly::Nodes::OpEqualNode) &&
+          #           x.value.value.respond_to?(:line)
+          #          x.value.value.line
+          #        else
+          #          x.line
+          #        end
+          # puts x.inspect if x.line == 21
+          line = x.line
+          @coverage[x.filename][line] = 0 if x.filename && line
+          x.accept(self)
+        end
       end
     end
 
@@ -74,9 +81,12 @@ module JCov
 
           # is this a file we need to instrument?
           if coverable_files.include? file
-            # run it through the js parser and custom renderer
-            tree    = @parser.parse(content, file)
-            content = @visitor.accept(tree)
+            # run it through the js parser to get coverage data
+            tree = @parser.parse(content, file)
+            @visitor.accept(tree)
+
+            # update the content with the coverage instrumentations
+            content = instrument_script(content, file)
 
             # cache the file if it's reloaded
             instrumented_files[file] = content
@@ -110,8 +120,8 @@ module JCov
 
               # run it through the js parser and custom renderer
               # the visitor will fill out the coverage data for this line
-              tree    = @parser.parse(content, file)
-              content = @visitor.accept(tree)
+              tree = @parser.parse(content, file)
+              @visitor.accept(tree)
 
               # re-get the lines
               lines = coverage_data[file]
@@ -143,6 +153,24 @@ module JCov
 
       def override_runners_load_method
         runner.context['load'] = self.method('load')
+      end
+
+      def instrument_script content, filename
+        lines = coverage_data[filename] || {}
+        line_number = 0
+        output = ""
+
+        StringIO.new(content).each_line do |line|
+          line_number += 1
+          if lines.has_key? line_number
+            output << "_coverage_tick('#{filename}', #{line_number});"
+          end
+          output << line
+        end
+
+        puts output
+
+        output
       end
 
     end

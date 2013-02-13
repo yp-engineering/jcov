@@ -70,3 +70,39 @@ Feature: javascript interface
     """
     here I am
     """
+
+  Scenario: I want to find where I made an error in my runner file
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    // this is a comment
+    // this is another comment
+    var foo = 1;
+    var bar = 2;
+    var baz = 3;
+    fail();
+    """
+    When I run `jcov --trace`
+    Then the output should match:
+    """
+    test/javascripts/runner.js:6:\d+: fail is not defined
+    """
+
+  Scenario: I want to find where I made an error in tested Javascript
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    load("public/javascripts/foo.js");
+    """
+    And a file named "public/javascripts/foo.js" with:
+    """
+    // this is a comment
+    // this is another comment
+    var foo = 1;
+    var bar = 2;
+    var baz = 3;
+    fail();
+    """
+    When I run `jcov --trace`
+    Then the output should match:
+    """
+    public/javascripts/foo.js:6:\d+: fail is not defined
+    """
