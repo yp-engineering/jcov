@@ -43,10 +43,9 @@ module JCov
         override_runners_load_method
         add_coverage_method_to_context
 
-        @visitor = CoverageVisitor.new(coverage_data)
-        @parser  = RKelly::Parser.new
-
         @instrumented_files = {}
+
+        @parser = create_parser
       end
 
       def coverable_files
@@ -81,9 +80,9 @@ module JCov
 
           # is this a file we need to instrument?
           if coverable_files.include? file
+
             # run it through the js parser to get coverage data
-            tree = @parser.parse(content, file)
-            @visitor.accept(tree)
+            calculate_coverage_data file, content
 
             # update the content with the coverage instrumentations
             content = instrument_script(content, file)
@@ -118,10 +117,9 @@ module JCov
               # load it now
               content = File.read(file)
 
-              # run it through the js parser and custom renderer
-              # the visitor will fill out the coverage data for this line
-              tree = @parser.parse(content, file)
-              @visitor.accept(tree)
+              # run it through the js parser
+              # the visitor will fill out the coverage data for this file
+              calculate_coverage_data file, content
 
               # re-get the lines
               lines = coverage_data[file]
@@ -146,6 +144,25 @@ module JCov
       end
 
     private
+
+      def create_parser
+        parser = V8::Context.new
+
+        parser.load(File.expand_path('../../../vendor/esprima-1.0.2.js', __FILE__))
+        parser.load(File.expand_path('../js/parser.js', __FILE__))
+
+        parser['print'] = lambda {|this, x| puts x }
+        # set up line counter for covered lines
+        parser['lineCovered'] = lambda {|this, file, line| coverage_data[file][line] = 0 }
+
+        parser
+      end
+
+      def calculate_coverage_data filename, content
+        @parser['filename'] = filename
+        @parser['code']     = content
+        @parser.eval("JCov.calculateCoverageData(code, filename);")
+      end
 
       def add_coverage_method_to_context
         runner.context['_coverage_tick'] = self.method('_coverage_tick')

@@ -9,3 +9,18 @@ Math.mean = function (array) {
 
   return sum / array.length;
 };
+
+var foo = function () {
+  // what
+  var x = 1;
+};
+
+// foo
+//   .bar
+//   .wibble()
+//   .baz();
+
+foo(function () {
+  // yes
+  var y = 1;
+});
