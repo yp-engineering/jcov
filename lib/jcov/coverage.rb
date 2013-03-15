@@ -128,10 +128,11 @@ module JCov
               cover = 0
             else
               # munge the count data together to get coverage
-              cover = lines.values.inject(0) { |memo, count| memo + ((count > 0) ? 1 : 0) }
+              cover = lines.values.compact.inject(0) { |memo, count| memo + ((count > 0) ? 1 : 0) }
             end
 
-            total = lines.count
+            # ignore nil values
+            total = lines.values.compact.count
 
             [file, total, cover]
           end
@@ -148,12 +149,19 @@ module JCov
       def create_parser
         parser = V8::Context.new
 
-        parser.load(File.expand_path('../../../vendor/esprima-1.0.2.js', __FILE__))
         parser.load(File.expand_path('../js/parser.js', __FILE__))
+        parser.load(File.expand_path('../../../vendor/acorn.js', __FILE__))
+        parser.load(File.expand_path('../../../vendor/walk.js', __FILE__))
 
         parser['print'] = lambda {|this, x| puts x }
         # set up line counter for covered lines
-        parser['lineCovered'] = lambda {|this, file, line| coverage_data[file][line] = 0 }
+        parser['lineCovered'] = lambda do |this, file, line|
+          coverage_data[file][line] = 0 unless coverage_data[file].has_key? line
+        end
+
+        parser['ignoreLine']  = lambda do |this, file, line|
+          coverage_data[file][line] = nil # set to nil so it's ignored
+        end
 
         parser
       end
@@ -179,7 +187,7 @@ module JCov
 
         StringIO.new(content).each_line do |line|
           line_number += 1
-          if lines.has_key? line_number
+          if !lines[line_number].nil? # nil values are ones set to be ignored by ignoreLine
             output << "_coverage_tick('#{filename}', #{line_number});"
           end
           output << line

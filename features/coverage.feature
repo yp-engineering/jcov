@@ -244,3 +244,20 @@ Feature: coverage
     """
     Total Coverage: (1/1) 100.0%
     """
+
+  Scenario: it handles object definitions with function values
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var obj = {
+      foo: function () {
+        var test = 0;
+      }
+    };
+
+    obj.foo();
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    Total Coverage: (3/3) 100.0%
+    """
