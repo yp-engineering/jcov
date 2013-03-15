@@ -193,8 +193,6 @@ module JCov
           output << line
         end
 
-        puts output
-
         output
       end
 
