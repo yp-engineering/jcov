@@ -277,3 +277,18 @@ Feature: coverage
     """
     Total Coverage: (2/3) 66.7%
     """
+
+  Scenario: it handles broken up if statements
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo = 3;
+    if (foo > 1 &&
+        foo < 8) {
+      var bar = 2;
+    }
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    Total Coverage: (3/3) 100.0%
+    """
