@@ -261,3 +261,19 @@ Feature: coverage
     """
     Total Coverage: (3/3) 100.0%
     """
+
+  Scenario: it handles else if statements correctly
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    if (false) {
+      var one = 1;
+    }
+    else if (true) {
+      var two = 2;
+    }
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    Total Coverage: (2/3) 66.7%
+    """
