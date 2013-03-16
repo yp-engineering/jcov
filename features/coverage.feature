@@ -292,3 +292,22 @@ Feature: coverage
     """
     Total Coverage: (3/3) 100.0%
     """
+
+  Scenario: it handles weirdly formatted case statements
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo = 'bar';
+    switch (foo) {
+      case 'bar': wibble = 1;
+        break;
+      case 'baz': wibble = 2;
+        break;
+      default:
+        wibble = 3;
+    }
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    Total Coverage: (3/5) 60.0%
+    """
