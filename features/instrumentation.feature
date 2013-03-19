@@ -9,17 +9,30 @@ Feature: instrumentation
     error_count = 0;
     """
 
-  Scenario: functions should be reported as covered
+  Scenario: it dumps instrumented file contents when a flag is set
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var bar = 0;
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);var bar = 0;
+    """
+
+  Scenario: functions should be covered
     Given a file named "public/javascripts/foo.js" with:
     """
     function foo() {
       var bar = 0;
     }
     """
-    When I run `jcov`
+    When I run `jcov --dump`
     Then the output should contain:
     """
-    Total Coverage: (1/2) 50.0%
+    _coverage_tick('public/javascripts/foo.js', 1);function foo() {
+    _coverage_tick('public/javascripts/foo.js', 2);  var bar = 0;
+    }
     """
 
   Scenario: ignores comments
@@ -30,10 +43,13 @@ Feature: instrumentation
     var bar = 0;
     // three
     """
-    When I run `jcov`
+    When I run `jcov --dump`
     Then the output should contain:
     """
-    Total Coverage: (1/1) 100.0%
+    // one
+    // two
+    _coverage_tick('public/javascripts/foo.js', 3);var bar = 0;
+    // three
     """
 
   Scenario: it handles object definitions with function values
@@ -47,10 +63,16 @@ Feature: instrumentation
 
     obj.foo();
     """
-    When I run `jcov`
+    When I run `jcov --dump`
     Then the output should contain:
     """
-    Total Coverage: (3/3) 100.0%
+    _coverage_tick('public/javascripts/foo.js', 1);var obj = {
+      foo: function () {
+    _coverage_tick('public/javascripts/foo.js', 3);    var test = 0;
+      }
+    };
+
+    _coverage_tick('public/javascripts/foo.js', 7);obj.foo();
     """
 
   Scenario: it handles else if statements correctly
@@ -63,10 +85,15 @@ Feature: instrumentation
       var two = 2;
     }
     """
-    When I run `jcov`
+    When I run `jcov --dump`
     Then the output should contain:
     """
-    Total Coverage: (2/3) 66.7%
+    _coverage_tick('public/javascripts/foo.js', 1);if (false) {
+    _coverage_tick('public/javascripts/foo.js', 2);  var one = 1;
+    }
+    else if (true) {
+    _coverage_tick('public/javascripts/foo.js', 5);  var two = 2;
+    }
     """
 
   Scenario: it handles broken up if statements
@@ -78,10 +105,14 @@ Feature: instrumentation
       var bar = 2;
     }
     """
-    When I run `jcov`
+    When I run `jcov --dump`
     Then the output should contain:
     """
-    Total Coverage: (3/3) 100.0%
+    _coverage_tick('public/javascripts/foo.js', 1);var foo = 3;
+    _coverage_tick('public/javascripts/foo.js', 2);if (foo > 1 &&
+        foo < 8) {
+    _coverage_tick('public/javascripts/foo.js', 4);  var bar = 2;
+    }
     """
 
   Scenario: it handles weirdly formatted case statements
@@ -97,8 +128,16 @@ Feature: instrumentation
         wibble = 3;
     }
     """
-    When I run `jcov`
+    When I run `jcov --dump`
     Then the output should contain:
     """
-    Total Coverage: (3/5) 60.0%
+    _coverage_tick('public/javascripts/foo.js', 1);var foo = 'bar';
+    _coverage_tick('public/javascripts/foo.js', 2);switch (foo) {
+      case 'bar': wibble = 1;
+    _coverage_tick('public/javascripts/foo.js', 4);    break;
+      case 'baz': wibble = 2;
+    _coverage_tick('public/javascripts/foo.js', 6);    break;
+      default:
+    _coverage_tick('public/javascripts/foo.js', 8);    wibble = 3;
+    }
     """

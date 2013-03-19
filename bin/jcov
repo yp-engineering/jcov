@@ -13,7 +13,7 @@ global_option '--no-color', 'Disable color output'
 global_option '--no-coverage', 'Disable coverage output'
 global_option '--report', 'Report test coverage'
 global_option '--test REGEX', 'Limit the tests to only the ones that match the regular expression'
-global_option '--dump' 'Dump instrumented Javascript for debugging purposes'
+global_option '--dump', 'Dump instrumented Javascript for debugging purposes'
 global_option '-c', '--config FILE', 'Specify a configuration file to use'
 
 default_command :run
