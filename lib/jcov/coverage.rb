@@ -193,7 +193,7 @@ module JCov
           output << line
         end
 
-        puts output if ENV['WTF']
+        puts output if options.dump
 
         output
       end
