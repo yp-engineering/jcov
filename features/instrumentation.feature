@@ -214,3 +214,37 @@ Feature: instrumentation
     """
     _coverage_tick('public/javascripts/foo.js', 1);if (foo) bar();
     """
+
+  Scenario: ignores empty catch statements
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    try {
+      foo();
+    }
+    catch(e) {}
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);try {
+    _coverage_tick('public/javascripts/foo.js', 2);  foo();
+    }
+    catch(e) {}
+    """
+
+  Scenario: ignores extra semicolons
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    try {
+      foo();
+    }
+    catch(e) {};
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);try {
+    _coverage_tick('public/javascripts/foo.js', 2);  foo();
+    }
+    catch(e) {};
+    """
