@@ -192,3 +192,14 @@ Feature: instrumentation
     else
       baz = 3;
     """
+
+  Scenario: covers inline object definitions
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo = {bar:'baz'};
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);var foo = {bar:'baz'};
+    """
