@@ -141,3 +141,54 @@ Feature: instrumentation
     _coverage_tick('public/javascripts/foo.js', 8);    wibble = 3;
     }
     """
+
+  Scenario: it handles stupid formatting with grace
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo = 1
+      , bar = 2
+      , baz = function () { var wibble = 3; };
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);var foo = 1
+      , bar = 2
+      , baz = function () { var wibble = 3; };
+    """
+
+  Scenario: it still handles multiline functions within stupid formatting
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo = 1
+      , bar = 2
+      , baz = function () {
+          var wibble = 3;
+        };
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);var foo = 1
+      , bar = 2
+      , baz = function () {
+    _coverage_tick('public/javascripts/foo.js', 4);      var wibble = 3;
+        };
+    """
+
+  Scenario: it handles if..else statements without parens gracefully
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    if (foo)
+      bar = 1;
+    else
+      baz = 3;
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);if (foo)
+      bar = 1;
+    else
+      baz = 3;
+    """
