@@ -248,3 +248,16 @@ Feature: instrumentation
     }
     catch(e) {};
     """
+
+  Scenario: handles mixed inline and non-inline variable declarations
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo, bar,
+        wibble = 'foo';
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);var foo, bar,
+        wibble = 'foo';
+    """
