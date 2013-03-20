@@ -31,7 +31,7 @@ Feature: instrumentation
     Then the output should contain:
     """
     _coverage_tick('public/javascripts/foo.js', 1);function foo() {
-    _coverage_tick('public/javascripts/foo.js', 2);  var bar = 0;
+      _coverage_tick('public/javascripts/foo.js', 2);var bar = 0;
     }
     """
 
@@ -68,7 +68,7 @@ Feature: instrumentation
     """
     _coverage_tick('public/javascripts/foo.js', 1);var obj = {
       foo: function () {
-    _coverage_tick('public/javascripts/foo.js', 3);    var test = 0;
+        _coverage_tick('public/javascripts/foo.js', 3);var test = 0;
       }
     };
 
@@ -89,10 +89,10 @@ Feature: instrumentation
     Then the output should contain:
     """
     _coverage_tick('public/javascripts/foo.js', 1);if (false) {
-    _coverage_tick('public/javascripts/foo.js', 2);  var one = 1;
+      _coverage_tick('public/javascripts/foo.js', 2);var one = 1;
     }
     else if (true) {
-    _coverage_tick('public/javascripts/foo.js', 5);  var two = 2;
+      _coverage_tick('public/javascripts/foo.js', 5);var two = 2;
     }
     """
 
@@ -111,7 +111,7 @@ Feature: instrumentation
     _coverage_tick('public/javascripts/foo.js', 1);var foo = 3;
     _coverage_tick('public/javascripts/foo.js', 2);if (foo > 1 &&
         foo < 8) {
-    _coverage_tick('public/javascripts/foo.js', 4);  var bar = 2;
+      _coverage_tick('public/javascripts/foo.js', 4);var bar = 2;
     }
     """
 
@@ -133,12 +133,12 @@ Feature: instrumentation
     """
     _coverage_tick('public/javascripts/foo.js', 1);var foo = 'bar';
     _coverage_tick('public/javascripts/foo.js', 2);switch (foo) {
-      case 'bar': wibble = 1;
-    _coverage_tick('public/javascripts/foo.js', 4);    break;
-      case 'baz': wibble = 2;
-    _coverage_tick('public/javascripts/foo.js', 6);    break;
+      case 'bar': _coverage_tick('public/javascripts/foo.js', 3);wibble = 1;
+        _coverage_tick('public/javascripts/foo.js', 4);break;
+      case 'baz': _coverage_tick('public/javascripts/foo.js', 5);wibble = 2;
+        _coverage_tick('public/javascripts/foo.js', 6);break;
       default:
-    _coverage_tick('public/javascripts/foo.js', 8);    wibble = 3;
+        _coverage_tick('public/javascripts/foo.js', 8);wibble = 3;
     }
     """
 
@@ -154,7 +154,7 @@ Feature: instrumentation
     """
     _coverage_tick('public/javascripts/foo.js', 1);var foo = 1
       , bar = 2
-      , baz = function () { var wibble = 3; };
+      , baz = function () { _coverage_tick('public/javascripts/foo.js', 3);var wibble = 3; };
     """
 
   Scenario: it still handles multiline functions within stupid formatting
@@ -172,7 +172,7 @@ Feature: instrumentation
     _coverage_tick('public/javascripts/foo.js', 1);var foo = 1
       , bar = 2
       , baz = function () {
-    _coverage_tick('public/javascripts/foo.js', 4);      var wibble = 3;
+          _coverage_tick('public/javascripts/foo.js', 4);var wibble = 3;
         };
     """
 
@@ -229,10 +229,10 @@ Feature: instrumentation
     Then the output should contain:
     """
     _coverage_tick('public/javascripts/foo.js', 1);try {
-    _coverage_tick('public/javascripts/foo.js', 2);  foo();
+      _coverage_tick('public/javascripts/foo.js', 2);foo();
     }
     catch(e) {
-    _coverage_tick('public/javascripts/foo.js', 5);  bar();
+      _coverage_tick('public/javascripts/foo.js', 5);bar();
     }
     """
 
@@ -248,7 +248,7 @@ Feature: instrumentation
     Then the output should contain:
     """
     _coverage_tick('public/javascripts/foo.js', 1);try {
-    _coverage_tick('public/javascripts/foo.js', 2);  foo();
+      _coverage_tick('public/javascripts/foo.js', 2);foo();
     }
     catch(e) {}
     """
@@ -265,7 +265,7 @@ Feature: instrumentation
     Then the output should contain:
     """
     _coverage_tick('public/javascripts/foo.js', 1);try {
-    _coverage_tick('public/javascripts/foo.js', 2);  foo();
+      _coverage_tick('public/javascripts/foo.js', 2);foo();
     }
     catch(e) {};
     """
@@ -281,4 +281,15 @@ Feature: instrumentation
     """
     _coverage_tick('public/javascripts/foo.js', 1);var foo, bar,
         wibble = 'foo';
+    """
+
+  Scenario: handles inline functions appropriately
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    var foo = function () { var bar = 0; };
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);var foo = function () { var bar = 0; };
     """

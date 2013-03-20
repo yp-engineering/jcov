@@ -155,8 +155,10 @@ module JCov
 
         parser['print'] = lambda {|this, x| puts x }
         # set up line counter for covered lines
-        parser['lineCovered'] = lambda do |this, file, line|
-          coverage_data[file][line] = 0 unless coverage_data[file].has_key? line
+        parser['lineCovered'] = lambda do |this, file, line, column|
+          # don't record this if the line has already been set to nil
+          # -- nil lines have been explicitly ignored
+          coverage_data[file][line] = column unless coverage_data[file].has_key?(line) && coverage_data[file].nil?
         end
 
         parser['ignoreLine']  = lambda do |this, file, line|
@@ -188,9 +190,14 @@ module JCov
         StringIO.new(content).each_line do |line|
           line_number += 1
           if !lines[line_number].nil? # nil values are ones set to be ignored by ignoreLine
+            column = lines[line_number]
+            output << line[0...column]
             output << "_coverage_tick('#{filename}', #{line_number});"
+            output << line[column..-1]
+            lines[line_number] = 0 # reset to zero for counting
+          else
+            output << line
           end
-          output << line
         end
 
         puts output if options.dump
