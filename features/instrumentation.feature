@@ -293,3 +293,18 @@ Feature: instrumentation
     """
     _coverage_tick('public/javascripts/foo.js', 1);var foo = function () { var bar = 0; };
     """
+
+  Scenario: it handles for..in statements appropriately
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    for (var i in foo) {
+      bar();
+    }
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);for (var i in foo) {
+      _coverage_tick('public/javascripts/foo.js', 2);bar();
+    }
+    """
