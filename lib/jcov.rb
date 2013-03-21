@@ -1,6 +1,7 @@
 require 'v8'
 
 require 'jcov/version'
+require 'jcov/errors'
 require 'jcov/configuration'
 require 'jcov/commands'
 require 'jcov/runner'

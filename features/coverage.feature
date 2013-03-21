@@ -216,3 +216,26 @@ Feature: coverage
     Then the exit status should be 0
     And the output should not contain "FAIL"
     And the output should not contain "Total Coverage"
+
+  Scenario: it handles syntax errors gracefully
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    // yep
+    var bar = \foo;
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    error: Expecting Unicode escape sequence \uXXXX (2:11) in public/javascripts/foo.js
+    """
+
+  Scenario: uncovered files with a syntax error should not cause a problem when loaded (Issue #3)
+    Given a file named "public/javascripts/notrun.js" with:
+    """
+    this will cause a syntax error because it's not actual javascript
+    """
+    When I run `jcov`
+    Then the output should contain:
+    """
+    error: Unexpected token (1:5) in public/javascripts/notrun.js
+    """

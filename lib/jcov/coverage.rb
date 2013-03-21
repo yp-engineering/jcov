@@ -84,21 +84,15 @@ module JCov
 
       # reduce the coverage data to file, total line count, and covered line count
       def reduced_coverage_data
-        if @reduced_coverage_data.nil?
-          @reduced_coverage_data = coverage_data.map do |file, lines|
+        # cache the result
+        @reduced_coverage_data ||=
+          coverage_data.map do |file, lines|
             # if we don't have any data for this file it was never loaded
             if lines.empty?
               # load it now
-              content = File.read(file)
+              lines = examine_uncovered_file file
 
-              # run it through the js parser
-              # the visitor will fill out the coverage data for this file
-              calculate_coverage_data file, content
-
-              # re-get the lines
-              lines = coverage_data[file]
-
-              # this file was never run
+              # this file was never run so it has zero coverage
               cover = 0
             else
               # munge the count data together to get coverage
@@ -110,15 +104,27 @@ module JCov
 
             [file, total, cover]
           end
-        end
-        @reduced_coverage_data
       end
 
+      # for coverage reporting
       def get_binding
         binding
       end
 
     private
+
+      # when a file is in the list to be examined but never loaded
+      # we have to load it ourselves to calculate the full coverage counts
+      def examine_uncovered_file(filename)
+        content = File.read(filename)
+
+        # run it through the js parser
+        # the visitor will fill out the coverage data for this file
+        calculate_coverage_data filename, content
+
+        # re-get the lines
+        coverage_data[filename]
+      end
 
       def create_parser
         parser = V8::Context.new
@@ -146,6 +152,9 @@ module JCov
         @parser['filename'] = filename
         @parser['code']     = content
         @parser.eval("JCov.calculateCoverageData(code, filename);")
+      rescue V8::Error => e
+        message = e.message.split(' at').first
+        raise JCov::ParseError.new("#{message} in #{filename}")
       end
 
       def add_coverage_method_to_context
