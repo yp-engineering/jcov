@@ -1,5 +1,4 @@
 require 'v8'
-require 'rkelly'
 
 require 'jcov/version'
 require 'jcov/configuration'

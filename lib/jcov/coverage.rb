@@ -1,33 +1,7 @@
 module JCov
   module Coverage
 
-    # Make our own RKelly's Visitor
-    class CoverageVisitor < RKelly::Visitors::Visitor
-      def initialize(coverage)
-        @coverage = coverage
-        @indent = 0
-      end
-
-      # whenever we hit a line, add the instrumentation
-      def visit_SourceElementsNode(o)
-        o.value.each do |x|
-          # function statements are given the wrong line numbers
-          # line = if x.is_a?(RKelly::Nodes::ExpressionStatementNode) &&
-          #           x.value.is_a?(RKelly::Nodes::OpEqualNode) &&
-          #           x.value.value.respond_to?(:line)
-          #          x.value.value.line
-          #        else
-          #          x.line
-          #        end
-          # puts x.inspect if x.line == 21
-          line = x.line
-          @coverage[x.filename][line] = 0 if x.filename && line
-          x.accept(self)
-        end
-      end
-    end
-
-
+    # Runner wrapper that instruments files for coverage calculation
     class CoverageRunner
       attr_reader :config
       attr_reader :options
