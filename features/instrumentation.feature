@@ -14,7 +14,7 @@ Feature: instrumentation
     """
     var bar = 0;
     """
-    When I run `jcov --dump`
+    When I run `jcov --dump --trace`
     Then the output should contain:
     """
     _coverage_tick('public/javascripts/foo.js', 1);var bar = 0;

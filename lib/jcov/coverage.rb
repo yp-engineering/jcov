@@ -8,7 +8,7 @@ module JCov
       attr_reader :runner
       attr_reader :instrumented_files
 
-      def initialize config, options
+      def initialize(config, options)
         @config  = config
         @options = options
 
@@ -45,7 +45,7 @@ module JCov
       end
 
       # our new load method
-      def load file
+      def load(file)
         if instrumented_files[file]
           # reuse previously loaded file
           content = instrumented_files[file]
@@ -69,7 +69,7 @@ module JCov
         runner.context.eval(content, file)
       end
 
-      def _coverage_tick file, line
+      def _coverage_tick(file, line)
         coverage_data[file][line] += 1
       end
 
@@ -127,28 +127,17 @@ module JCov
       end
 
       def create_parser
-        parser = V8::Context.new
+        context = JCov::Context::InstrumentationContext.new(coverage_data)
+        parser = context.create
 
         parser.load(File.expand_path('../js/parser.js', __FILE__))
         parser.load(File.expand_path('../../../vendor/acorn.js', __FILE__))
         parser.load(File.expand_path('../../../vendor/walk.js', __FILE__))
 
-        parser['print'] = lambda {|this, x| puts x }
-        # set up line counter for covered lines
-        parser['lineCovered'] = lambda do |this, file, line, column|
-          # don't record this if the line has already been set to nil
-          # -- nil lines have been explicitly ignored
-          coverage_data[file][line] = column unless coverage_data[file].has_key?(line) && coverage_data[file].nil?
-        end
-
-        parser['ignoreLine']  = lambda do |this, file, line|
-          coverage_data[file][line] = nil # set to nil so it's ignored
-        end
-
         parser
       end
 
-      def calculate_coverage_data filename, content
+      def calculate_coverage_data(filename, content)
         @parser['filename'] = filename
         @parser['code']     = content
         @parser.eval("JCov.calculateCoverageData(code, filename);")
@@ -165,7 +154,7 @@ module JCov
         runner.context['load'] = self.method('load')
       end
 
-      def instrument_script content, filename
+      def instrument_script(content, filename)
         lines = coverage_data[filename] || {}
         line_number = 0
         output = ""
