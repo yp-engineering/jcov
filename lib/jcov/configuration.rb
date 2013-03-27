@@ -14,11 +14,17 @@ module JCov
       "test_runner"             => "test/javascripts/runner.js",
       "error_field"             => "error_count",
       "report_output_directory" => "jcov",
+      "verbose"                 => false,
+      "color"                   => true,
+      "coverage"                => true,
+      "report"                  => false,
+      "dump"                    => false
     }
 
-    def initialize file
-      @filename = find_file(file)
-      @config = DEFAULTS.merge(@filename && YAML.load_file(@filename) || {})
+    def initialize(options)
+      @filename = find_file(options.config)
+      @config = DEFAULTS.merge(options.__hash__)
+      @config.merge!(YAML.load_file(@filename)) if @filename
       create_readers
     end
 

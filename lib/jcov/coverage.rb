@@ -4,14 +4,12 @@ module JCov
 
     attr_accessor :loader
     attr_accessor :config
-    attr_accessor :options
 
-    def initialize(config, options)
-      @config  = config
-      @options = options
+    def initialize(config)
+      @config = config
 
       # for loading and instrumenting fiels
-      @loader = JCov::Loader.new(coverable_files, :dump => options.dump)
+      @loader = JCov::Loader.new(coverable_files, :dump => config.dump)
     end
 
     def coverable_files

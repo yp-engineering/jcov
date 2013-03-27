@@ -2,24 +2,22 @@ module JCov
 
   class Runner
     attr_reader :config
-    attr_reader :options
     attr_reader :coverage
 
-    def initialize(config, options)
+    def initialize(config)
       @config  = config
-      @options = options
     end
 
     # which tests shall we run?
     def tests
       if @tests.nil?
-        if options.args.size > 0
-          @tests = options.args
+        if config.args.size > 0
+          @tests = config.args
         else
           @tests = Dir.glob(File.join(config.test_directory, "**", "*.js"))
         end
-        if options.test # limit to a single or group of tests
-          @tests = @tests.grep(/#{options.test}/)
+        if config.test # limit to a single or group of tests
+          @tests = @tests.grep(/#{config.test}/)
         end
         # remove the runner if it's in there
         @tests.delete(config.test_runner)
@@ -44,7 +42,7 @@ module JCov
 
     def setup
       # for coverage reporting
-      @coverage = JCov::Coverage.new(config, options)
+      @coverage = JCov::Coverage.new(config)
 
       # v8 context for running
       run_context = JCov::Context::RunContext.new(@coverage.loader)
@@ -52,9 +50,8 @@ module JCov
 
       # create the jcov context object
       @context['JCov'] = {}
-      @context['JCov']['tests']   = tests
-      @context['JCov']['config']  = config
-      @context['JCov']['options'] = options.__hash__
+      @context['JCov']['tests']  = tests
+      @context['JCov']['config'] = config
     end
 
   end

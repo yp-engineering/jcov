@@ -172,7 +172,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    println(JCov.options.verbose);
+    println(JCov.config.verbose);
     """
     When I run `jcov --verbose`
     Then the output should contain:
@@ -184,7 +184,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    println(JCov.options.color);
+    println(JCov.config.color);
     """
     When I run `jcov --no-color`
     Then the output should contain:
@@ -196,7 +196,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    println(JCov.options.color);
+    println(JCov.config.color);
     """
     When I run `jcov --color`
     Then the output should contain:
@@ -208,7 +208,7 @@ Feature: test runner
     Given a file named "test/javascripts/runner.js" with:
     """
     error_count = 0;
-    println(JCov.options.color);
+    println(JCov.config.color);
     """
     When I run `jcov`
     Then the output should contain:

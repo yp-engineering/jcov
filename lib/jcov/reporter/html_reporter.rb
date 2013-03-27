@@ -7,7 +7,7 @@ module JCov::Reporter
 
   class HTMLReporter
 
-    def initialize coverage_runner
+    def initialize(coverage_runner)
       @coverage_runner = coverage_runner
 
       @report_index_template = File.read File.expand_path('../report.html.erb', __FILE__)

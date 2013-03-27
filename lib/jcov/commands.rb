@@ -4,8 +4,8 @@ module JCov::Commands
 
   # the check command
   class Check
-    def initialize args, options
-      config = JCov::Configuration.new options.config
+    def initialize(args, options)
+      config = JCov::Configuration.new(options)
 
       if config.filename
         puts "Using configuration file: #{config.filename}"
@@ -19,16 +19,16 @@ module JCov::Commands
 
   # the run command
   class Run
-    def initialize args, options
+    def initialize(args, options)
       # default to no color unless we're on a tty
       options.default :color    => $stdout.tty?
       options.default :coverage => true
 
       options.args = args
 
-      config = JCov::Configuration.new(options.config)
+      config = JCov::Configuration.new(options)
 
-      runner = JCov::Runner.new(config, options)
+      runner = JCov::Runner.new(config)
 
       runner.run
 
