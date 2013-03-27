@@ -215,3 +215,15 @@ Feature: test runner
     """
     false
     """
+
+  Scenario: user can also use the old options object
+    Given a file named "test/javascripts/runner.js" with:
+    """
+    error_count = 0;
+    println(JCov.options.verbose);
+    """
+    When I run `jcov --verbose`
+    Then the output should contain:
+    """
+    true
+    """

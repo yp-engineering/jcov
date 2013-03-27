@@ -23,7 +23,7 @@ JSpec.cullGlobals = function () {
   }
 };
 
-if (JCov.config.verbose) {
+if (JCov.options.verbose) {
   load('jspec/ext/trace.js')
 } else {
   JSpec.include({
@@ -62,5 +62,5 @@ thing
 .run({reporter:      JSpec.reporters.Terminal,
       failuresOnly:  true,
       fixturePath:   'jspec/fixtures',
-      disableColors: !JCov.config.color})
+      disableColors: !JCov.options.color})
 .report();

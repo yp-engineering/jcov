@@ -50,8 +50,9 @@ module JCov
 
       # create the jcov context object
       @context['JCov'] = {}
-      @context['JCov']['tests']  = tests
-      @context['JCov']['config'] = config
+      @context['JCov']['tests']   = tests
+      @context['JCov']['config']  = config
+      @context['JCov']['options'] = config
     end
 
   end
