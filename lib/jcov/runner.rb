@@ -1,19 +1,17 @@
 module JCov
 
   class Runner
-    attr_reader :context
     attr_reader :config
     attr_reader :options
+    attr_reader :coverage
 
     def initialize(config, options)
       @config  = config
       @options = options
-
-      setup_context
     end
 
+    # which tests shall we run?
     def tests
-      # which tests shall we run?
       if @tests.nil?
         if options.args.size > 0
           @tests = options.args
@@ -30,69 +28,33 @@ module JCov
       @tests
     end
 
-    def print s
-      Kernel.print s
-    end
-
-    def println *s
-      Kernel.puts s
-    end
-
-    def load file
-      content = File.read(file)
-
-      context.eval(content, file)
-    end
-
-    # for JSpec
-    def readFile file
-      File.read(file)
-    end
-
-    # so we can do our dotted line output
-    def putc char
-      $stdout.putc(char);
-      $stdout.flush();
-    end
-
     def failure_count
-      context.eval(config.error_field)
+      @context.eval(config.error_field)
     end
 
     def run
-      context.load(config.test_runner)
+      setup
+
+      @context.load(config.test_runner)
 
       failure_count
     end
 
   private
 
-    def setup_context
-      # create a V8 context for this runner
-      @context = V8::Context.new
+    def setup
+      # for coverage reporting
+      @coverage = JCov::Coverage.new(config, options)
+
+      # v8 context for running
+      run_context = JCov::Context::RunContext.new(@coverage.loader)
+      @context = run_context.create
 
       # create the jcov context object
-      @context["JCov"] = {}
-
-      setup_object_proxies
-      setup_method_proxies
-    end
-
-    def setup_object_proxies
-      context['JCov']['tests']   = tests
-      context['JCov']['config']  = config
-      context['JCov']['options'] = options.__hash__
-    end
-
-    def setup_method_proxies
-      # these will become global methods in the context
-      %w{print
-         println
-         load
-         readFile
-         putc}.each do |method|
-        context[method] = self.method(method)
-      end
+      @context['JCov'] = {}
+      @context['JCov']['tests']   = tests
+      @context['JCov']['config']  = config
+      @context['JCov']['options'] = options.__hash__
     end
 
   end

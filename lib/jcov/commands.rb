@@ -28,17 +28,17 @@ module JCov::Commands
 
       config = JCov::Configuration.new(options.config)
 
-      runner = JCov::Coverage::CoverageRunner.new(config, options)
+      runner = JCov::Runner.new(config, options)
 
       runner.run
 
       abort "Test Failures! :(" if runner.failure_count > 0
 
       if options.report
-        JCov::Reporter::HTMLReporter.new(runner).report
+        JCov::Reporter::HTMLReporter.new(runner.coverage).report
       end
 
-      reporter = JCov::Reporter::ConsoleReporter.new(runner)
+      reporter = JCov::Reporter::ConsoleReporter.new(runner.coverage)
 
       abort unless reporter.report
     end
