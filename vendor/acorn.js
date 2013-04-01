@@ -20,7 +20,11 @@
 // [dammit]: acorn_loose.js
 // [walk]: util/walk.js
 
-(function(exports) {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") return mod(exports); // CommonJS
+  if (typeof define == "function" && define.amd) return define(["exports"], mod); // AMD
+  mod(self.acorn || (self.acorn = {})); // Plain browser env
+})(function(exports) {
   "use strict";
 
   exports.version = "0.1.01";
@@ -822,7 +826,7 @@
           case 85: out += String.fromCharCode(readHexChar(8)); break; // 'U'
           case 116: out += "\t"; break; // 't' -> '\t'
           case 98: out += "\b"; break; // 'b' -> '\b'
-          case 118: out += "\v"; break; // 'v' -> '\u000b'
+          case 118: out += "\u000b"; break; // 'v' -> '\u000b'
           case 102: out += "\f"; break; // 'f' -> '\f'
           case 48: out += "\0"; break; // 0 -> '\0'
           case 13: if (input.charCodeAt(tokPos) === 10) ++tokPos; // '\r\n'
@@ -941,6 +945,10 @@
   function setStrict(strct) {
     strict = strct;
     tokPos = lastEnd;
+    while (tokPos < tokLineStart) {
+      tokLineStart = input.lastIndexOf("\n", tokLineStart - 2) + 1;
+      --tokCurLine;
+    }
     skipSpace();
     readToken();
   }
@@ -1708,4 +1716,4 @@
     return finishNode(node, "Identifier");
   }
 
-})(typeof exports === "undefined" ? (self.acorn = {}) : exports);
+});

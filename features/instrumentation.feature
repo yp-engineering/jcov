@@ -308,3 +308,20 @@ Feature: instrumentation
       _coverage_tick('public/javascripts/foo.js', 2);bar();
     }
     """
+
+  Scenario: it does the right thing with "use strict";
+    Given a file named "public/javascripts/foo.js" with:
+    """
+    "use strict";
+
+    var foo = 1;
+    var bar = 2;
+    """
+    When I run `jcov --dump`
+    Then the output should contain:
+    """
+    _coverage_tick('public/javascripts/foo.js', 1);"use strict";
+
+    _coverage_tick('public/javascripts/foo.js', 3);var foo = 1;
+    _coverage_tick('public/javascripts/foo.js', 4);var bar = 2;
+    """
